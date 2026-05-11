@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Phenometric</title>
+  <meta name="description" content="Phenometric — building the next generation of clinical intelligence." />
+  <meta name="robots" content="index, follow" />
+
+  <!-- Open Graph / Social -->
+  <meta property="og:title" content="Phenometric" />
+  <meta property="og:description" content="Building the next generation of clinical intelligence." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://phenometric.com" />
+
+  <!-- Favicon (inline SVG, no external file needed) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='12' fill='%230B2545'/><path d='M16 40 L24 40 L28 22 L34 46 L40 32 L48 32' stroke='%23A8DADC' stroke-width='3.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #fafafa;
+      --bg-accent: #ffffff;
+      --ink: #0b2545;        /* deep clinical navy */
+      --ink-soft: #3d4f6b;
+      --muted: #6b7896;
+      --line: #e6e8ee;
+      --accent: #1f7a8c;     /* muted clinical teal */
+      --accent-hover: #155a69;
+      --glow: rgba(31, 122, 140, 0.10);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+    }
+
+    /* Subtle background pattern (medical grid feel) */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 20% 10%, var(--glow), transparent 40%),
+        radial-gradient(circle at 80% 90%, var(--glow), transparent 40%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 32px;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .logo-mark {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--ink);
+    }
+
+    .logo-mark svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .logo-mark span {
+      font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-weight: 600;
+      font-size: 17px;
+      letter-spacing: -0.01em;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--bg-accent);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--ink-soft);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .status-pill::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 4px var(--glow);
+      animation: pulse 2.4s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: 0.6; transform: scale(0.85); }
+    }
+
+    /* Hero */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 64px 0;
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 28px;
+    }
+
+    h1 {
+      font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-weight: 600;
+      font-size: clamp(48px, 9vw, 96px);
+      letter-spacing: -0.035em;
+      line-height: 1.0;
+      color: var(--ink);
+      margin-bottom: 28px;
+      white-space: nowrap;
+    }
+
+    /* The "m" in Phenometric, drawn as an ECG/pulse trace */
+    .pulse-m {
+      display: inline-block;
+      width: 1em;
+      height: 0.58em;
+      vertical-align: -0.03em;
+      margin: 0 0.02em;
+      line-height: 0;
+      color: var(--accent);
+    }
+
+    .pulse-m svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    .tagline {
+      font-size: clamp(17px, 2.2vw, 20px);
+      font-weight: 400;
+      line-height: 1.55;
+      color: var(--ink-soft);
+      max-width: 540px;
+      margin: 0 auto 48px;
+    }
+
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 28px;
+      background: var(--ink);
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      border-radius: 6px;
+      transition: background 220ms ease, transform 220ms ease, box-shadow 220ms ease;
+      box-shadow: 0 1px 2px rgba(11, 37, 69, 0.08), 0 8px 24px rgba(11, 37, 69, 0.12);
+    }
+
+    .cta:hover {
+      background: var(--accent);
+      transform: translateY(-1px);
+      box-shadow: 0 1px 2px rgba(11, 37, 69, 0.08), 0 12px 28px rgba(31, 122, 140, 0.25);
+    }
+
+    .cta svg {
+      width: 14px;
+      height: 14px;
+      transition: transform 220ms ease;
+    }
+
+    .cta:hover svg {
+      transform: translateX(3px);
+    }
+
+    /* Footer */
+    footer {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding-top: 32px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    footer a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 180ms ease;
+    }
+
+    footer a:hover {
+      color: var(--ink);
+    }
+
+    /* Mobile */
+    @media (max-width: 640px) {
+      .container { padding: 24px; }
+      footer {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <header>
+      <div class="logo-mark" aria-label="Phenometric">
+        <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+          <rect width="64" height="64" rx="12" fill="#0B2545"/>
+          <path d="M16 40 L24 40 L28 22 L34 46 L40 32 L48 32"
+                stroke="#A8DADC" stroke-width="3.5" fill="none"
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>Phenometric</span>
+      </div>
+
+      <div class="status-pill" aria-label="Status: in stealth">In stealth</div>
+    </header>
+
+    <main>
+      <div class="eyebrow">Clinical Intelligence — Reimagined</div>
+
+      <h1>Phenometric</h1>
+
+      <p class="tagline">
+        We are quietly building the next generation of clinical intelligence.
+        Something meaningful is on the way.
+      </p>
+
+      <a class="cta" href="mailto:gal.rom@phenometric.com?subject=Phenometric%20Inquiry">
+        Contact Us
+        <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </main>
+
+    <footer>
+      <div>&copy; <span id="year"></span> Phenometric. All rights reserved.</div>
+      <div><a href="mailto:gal.rom@phenometric.com">gal.rom@phenometric.com</a></div>
+    </footer>
+
+  </div>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
