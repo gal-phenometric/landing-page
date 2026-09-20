@@ -96,34 +96,47 @@
       margin: 0 auto 48px;
     }
 
-    .info-list {
-      width: 100%;
-      max-width: 620px;
-      margin: 0 auto 48px;
-      text-align: left;
-      display: flex;
-      flex-direction: column;
-      gap: 22px;
-    }
-
-    .info-item {
-      padding-left: 18px;
-      border-left: 2px solid var(--accent);
-    }
-
-    .info-item .info-label {
-      display: block;
+    .section-heading {
       font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
       font-weight: 600;
-      font-size: 15px;
+      font-size: clamp(21px, 2.8vw, 27px);
+      letter-spacing: -0.01em;
+      line-height: 1.3;
       color: var(--ink);
-      margin-bottom: 4px;
+      max-width: 600px;
+      margin: 40px auto 14px;
     }
 
-    .info-item .info-desc {
-      font-size: 14.5px;
+    .section-heading:first-of-type {
+      margin-top: 0;
+    }
+
+    .section-lead {
+      font-size: 15.5px;
+      font-weight: 400;
       line-height: 1.6;
-      color: var(--muted);
+      color: var(--ink-soft);
+      max-width: 580px;
+      margin: 0 auto;
+    }
+
+    .emphasis-line {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--ink);
+      max-width: 580px;
+      margin: 16px auto 0;
+    }
+
+    .moving-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-width: 580px;
+      margin: 0 auto;
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--ink-soft);
     }
 
     .cta {
@@ -236,9 +249,11 @@
     <main>
       <img class="logo-img" src="assets/logo.png" alt="Phenometric" />
 
-      <p class="tagline">
-        We turn everyday smartphone interaction into a longitudinal neurological measurement
+      <h2 class="section-heading">Neurology has a visibility problem</h2>
+      <p class="section-lead">
+        Phenometric turns everyday smartphone interactions into a continuous, fully passive digital signature of neurological function across cognitive, motor and linguistic domains, revealing meaningful changes and patterns over time.
       </p>
+      <p class="emphasis-line">No tests. No wearables. No change in behavior.</p>
 
       <div class="info-list">
         <div class="info-item">
@@ -255,8 +270,18 @@
         </div>
       </div>
 
+      <h2 class="section-heading">Already moving</h2>
+      <div class="moving-list">
+        <p>Our platform is live, clinical validations are running, first clients onboarded</p>
+        <p>Strategic collaboration with Sheba Medical Center signed</p>
+        <p>Patent pending submitted</p>
+      </div>
+      <p class="section-lead" style="margin-top: 18px;">
+        Phenometric is currently engaging with selected investors and strategic partners.
+      </p>
+      <br/>
       <a class="cta" href="mailto:gadi.mikles@phenometric.com?subject=Phenometric%20Inquiry">
-        Contact Us
+        Let's talk
         <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
           <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
