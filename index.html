@@ -118,6 +118,11 @@
       flex-shrink: 0;
     }
 
+    /* ---------- Top logo ---------- */
+    .top-logo {
+      padding: 28px 0 0;
+    }
+
     /* ---------- Hero ---------- */
     .hero {
       display: grid;
@@ -300,7 +305,12 @@
       text-align: center;
     }
 
-    .cta-section .section-lead {
+    .cta-lead-strong {
+      font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.35;
       margin-bottom: 28px;
     }
 
@@ -455,12 +465,16 @@
 </head>
 <body>
 
+  <div class="wrap top-logo">
+    <img class="brand-logo" src="assets/logo-dark.png" alt="Phenometric" />
+  </div>
+
   <section class="wrap hero">
     <div class="hero-text">
       <div class="hero-eyebrow">Real-world neurology. A brighter tomorrow.</div>
       <h1 class="hero-heading">Neurology has a visibility problem<span class="dot">.</span></h1>
       <p class="hero-lead">
-        Phenometric turns everyday smartphone interactions into a continuous, fully passive digital signature of neurological function across cognitive, motor and linguistic domains &mdash; revealing meaningful changes and patterns over time.
+        Phenometric turns everyday smartphone interactions into a continuous, fully passive digital signature of neurological function across cognitive, motor and linguistic domains, revealing meaningful changes and patterns over time.
       </p>
       <p class="hero-emphasis">No tests. No wearables. No change in behavior.</p>
     </div>
@@ -525,7 +539,7 @@
 
   <div class="bottom-panel">
     <section class="wrap cta-section">
-      <p class="section-lead">Phenometric is currently engaging with selected investors and strategic partners.</p>
+      <p class="cta-lead-strong">Phenometric is currently engaging with selected investors and strategic partners.</p>
       <div class="cta-row">
         <a class="cta" href="mailto:gadi.mikles@phenometric.com?subject=Phenometric%20Inquiry">
           Let's talk
