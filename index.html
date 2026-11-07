@@ -16,6 +16,14 @@
   <!-- Favicon (inline SVG, no external file needed) -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='12' fill='%230B2545'/><path d='M16 40 L24 40 L28 22 L34 46 L40 32 L48 32' stroke='%23A8DADC' stroke-width='3.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>" />
 
+  <!-- Resolve the active tab before first paint (prevents a flash of the wrong panel) -->
+  <script>
+    (function () {
+      var t = new URLSearchParams(window.location.search).get('tab');
+      document.documentElement.setAttribute('data-tab', (t === 'team' || t === 'research') ? t : 'home');
+    })();
+  </script>
+
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -118,9 +126,167 @@
       flex-shrink: 0;
     }
 
-    /* ---------- Top logo ---------- */
-    .top-logo {
-      padding: 28px 0 0;
+    /* ---------- Top navigation / tabs ---------- */
+    html { scrollbar-gutter: stable; } /* no horizontal jump when page height changes */
+
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(255, 255, 255, 0.82);
+      -webkit-backdrop-filter: saturate(180%) blur(12px);
+      backdrop-filter: saturate(180%) blur(12px);
+      border-bottom: 1px solid transparent;
+      transition: border-color 220ms ease, box-shadow 220ms ease;
+    }
+
+    .site-nav.is-scrolled {
+      border-bottom-color: var(--line);
+      box-shadow: 0 1px 12px rgba(11, 37, 69, 0.05);
+    }
+
+    .site-nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding-top: 18px;
+      padding-bottom: 18px;
+    }
+
+    .brand-link {
+      display: inline-flex;
+      border-radius: 6px;
+    }
+
+    .brand-link:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 4px;
+    }
+
+    .tablist {
+      position: relative;
+      display: inline-flex;
+      gap: 4px;
+      padding: 4px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--bg-panel);
+      box-shadow: 0 1px 2px rgba(11, 37, 69, 0.04);
+    }
+
+    .tab {
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 92px;
+      padding: 9px 18px;
+      border-radius: 999px;
+      font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 13.5px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      color: var(--ink-soft);
+      text-decoration: none;
+      white-space: nowrap;
+      transition: color 200ms ease, background-color 200ms ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .tab:hover {
+      color: var(--ink);
+      background: var(--bg-accent);
+    }
+
+    .tab[aria-selected="true"],
+    .tab[aria-selected="true"]:hover {
+      color: #ffffff;
+      background: transparent;
+    }
+
+    /* Before JS positions the sliding indicator, paint the active tab directly */
+    .tablist:not(.is-ready) .tab[aria-selected="true"] {
+      background: var(--ink);
+    }
+
+    .tab:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .tab-indicator {
+      position: absolute;
+      z-index: 0;
+      top: 4px;
+      bottom: 4px;
+      left: 0;
+      width: 0;
+      border-radius: 999px;
+      background: var(--ink);
+      box-shadow: 0 1px 2px rgba(11, 37, 69, 0.12), 0 6px 16px rgba(11, 37, 69, 0.14);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .tablist.is-ready .tab-indicator {
+      opacity: 1;
+      transition: transform 320ms cubic-bezier(0.2, 0.8, 0.2, 1), width 320ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    /* ---------- Tab panels ---------- */
+    .tab-panel { display: none; }
+
+    html:not([data-tab]) #panel-home,
+    html[data-tab="home"] #panel-home,
+    html[data-tab="team"] #panel-team,
+    html[data-tab="research"] #panel-research {
+      display: block;
+    }
+
+    .tab-panel.is-entering {
+      animation: panel-in 280ms ease both;
+    }
+
+    @keyframes panel-in {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    /* ---------- Placeholder ("Coming soon") ---------- */
+    .placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: max(420px, calc(100vh - 330px));
+      min-height: max(420px, calc(100svh - 330px));
+      padding-top: 72px;
+      padding-bottom: 72px;
+    }
+
+    .placeholder .icon-badge {
+      margin-bottom: 22px;
+    }
+
+    .placeholder .hero-eyebrow {
+      margin-bottom: 14px;
+    }
+
+    .placeholder-heading {
+      font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-weight: 800;
+      font-size: clamp(34px, 5vw, 50px);
+      line-height: 1.12;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      margin-bottom: 16px;
+    }
+
+    .placeholder-heading .dot {
+      color: var(--accent);
     }
 
     /* ---------- Hero ---------- */
@@ -407,6 +573,403 @@
       color: var(--muted);
     }
 
+    /* ---------- Team page ---------- */
+    .visually-hidden {
+      position: absolute !important;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0 0 0 0);
+      white-space: nowrap; border: 0;
+    }
+
+    html.has-modal { overflow: hidden; }
+
+    .team-page {
+      padding-top: 56px;
+      padding-bottom: 88px;
+    }
+
+    .team-intro {
+      text-align: center;
+      max-width: 760px;
+      margin: 0 auto 56px;
+    }
+
+    .team-intro .hero-heading { margin-bottom: 16px; }
+
+    .partner-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: 28px;
+      padding: 9px 18px 9px 20px;
+      border-radius: 999px;
+      background: var(--ink);
+      color: #cfe3ea;
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      text-decoration: none;
+      box-shadow: 0 1px 2px rgba(11, 37, 69, 0.12), 0 8px 24px rgba(11, 37, 69, 0.12);
+      transition: transform 220ms ease, box-shadow 220ms ease;
+    }
+
+    .partner-chip:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 1px 2px rgba(11, 37, 69, 0.12), 0 12px 28px rgba(31, 156, 174, 0.22);
+    }
+
+    .partner-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    .partner-chip img { display: block; height: 22px; width: auto; }
+
+    /* Capabilities strip (Slide 15 top row) */
+    .capabilities {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .capability {
+      padding: 24px 22px;
+      background: var(--bg-panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: 0 1px 2px rgba(11, 37, 69, 0.04);
+    }
+
+    .capability .icon-badge { width: 40px; height: 40px; margin-bottom: 14px; }
+    .capability .icon-badge svg { width: 18px; height: 18px; }
+
+    .capability h3 {
+      font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent-dark);
+      margin-bottom: 6px;
+    }
+
+    .capability p { font-size: 13.5px; line-height: 1.55; color: var(--ink-soft); }
+
+    .team-section .divider-label { margin: 64px auto 32px; font-size: inherit; }
+
+    .pill-soft {
+      display: inline-block;
+      margin-left: 8px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: var(--bg-accent);
+      border: 1px solid var(--line);
+      color: var(--accent-dark);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      vertical-align: 1px;
+    }
+
+    /* Member cards */
+    .member-grid {
+      --cols: 4;
+      --gap: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: var(--gap);
+    }
+
+    .member-grid--core { --cols: 5; }
+
+    .member {
+      flex: 0 0 calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols));
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 28px 20px 22px;
+      background: var(--bg-panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: 0 1px 2px rgba(11, 37, 69, 0.04), 0 8px 24px rgba(11, 37, 69, 0.05);
+      transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+    }
+
+    .member:hover {
+      transform: translateY(-2px);
+      border-color: #d4e0ea;
+      box-shadow: 0 1px 2px rgba(11, 37, 69, 0.05), 0 14px 32px rgba(11, 37, 69, 0.09);
+    }
+
+    .member[hidden] { display: none; }
+
+    .member-photo {
+      flex-shrink: 0;
+      width: 112px;
+      height: 112px;
+      padding: 3px;
+      margin-bottom: 18px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, var(--accent), #a8dadc);
+    }
+
+    .member-photo picture { display: block; width: 100%; height: 100%; }
+
+    .member-photo img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 3px solid #ffffff;
+      background: var(--bg-accent);
+    }
+
+    .member-body {
+      flex: 1;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .member-name {
+      font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      line-height: 1.25;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+
+    .member-role {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-dark);
+      line-height: 1.4;
+    }
+
+    .member-affil { margin-top: 4px; font-size: 13.5px; color: var(--ink-soft); line-height: 1.45; }
+
+    .member-tags {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px;
+      margin: 14px 0 0;
+    }
+
+    .member-tags li {
+      padding: 4px 10px;
+      font-size: 12px;
+      line-height: 1.3;
+      color: var(--ink-soft);
+      background: var(--bg-accent);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+    }
+
+    .bio-btn {
+      margin-top: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #ffffff;
+      font: 600 13px/1 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--ink);
+      cursor: pointer;
+      transition: color 180ms ease, border-color 180ms ease, background-color 180ms ease;
+    }
+
+    .member-body > .bio-btn { margin-top: auto; }
+    .member-body > :nth-last-child(3) { margin-bottom: 18px; } /* space above the button */
+
+    .bio-btn:hover { color: var(--accent-dark); border-color: var(--accent); background: var(--bg-accent); }
+    .bio-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .bio-btn svg { width: 13px; height: 13px; transition: transform 180ms ease; }
+    .bio-btn:hover svg { transform: translateX(2px); }
+
+    .member-bio:not([hidden]) {
+      margin: -6px 0 14px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--ink-soft);
+      text-align: left;
+    }
+
+    /* Partner band */
+    .partner-band {
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      align-items: center;
+      gap: 48px;
+      margin-top: 80px;
+      padding: 44px 52px;
+      border-radius: 20px;
+      background: var(--ink);
+      color: #ffffff;
+      scroll-margin-top: 110px;
+      box-shadow: 0 1px 2px rgba(11, 37, 69, 0.12), 0 16px 40px rgba(11, 37, 69, 0.16);
+    }
+
+    .partner-band::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(31, 156, 174, 0.28), transparent 45%),
+        radial-gradient(circle at 100% 100%, rgba(254, 190, 16, 0.10), transparent 40%);
+      pointer-events: none;
+    }
+
+    .partner-logo, .partner-copy { position: relative; }
+
+    .partner-logo {
+      padding-right: 48px;
+      border-right: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    .partner-logo img { display: block; width: 168px; height: auto; }
+
+    .partner-eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #8fd3dc;
+      margin-bottom: 10px;
+    }
+
+    .partner-heading {
+      font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: clamp(22px, 2.6vw, 28px);
+      font-weight: 800;
+      letter-spacing: -0.015em;
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+
+    .partner-text { font-size: 15.5px; line-height: 1.6; color: #c9d6e3; max-width: 560px; }
+
+    /* Bio dialog */
+    .bio-dialog {
+      width: min(560px, calc(100% - 32px));
+      max-height: calc(100vh - 48px);
+      margin: auto;
+      padding: 0;
+      border: 0;
+      border-radius: 20px;
+      background: #ffffff;
+      color: var(--ink);
+      box-shadow: 0 24px 64px rgba(11, 37, 69, 0.28);
+    }
+
+    .bio-dialog::backdrop {
+      background: rgba(11, 37, 69, 0.45);
+      -webkit-backdrop-filter: blur(4px);
+      backdrop-filter: blur(4px);
+    }
+
+    .bio-dialog[open] { animation: dialog-in 260ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+
+    @keyframes dialog-in {
+      from { opacity: 0; transform: translateY(12px) scale(0.98); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    .bio-dialog-inner { position: relative; padding: 36px 36px 32px; }
+
+    .bio-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border: 0;
+      border-radius: 50%;
+      background: transparent;
+      color: var(--ink-soft);
+      cursor: pointer;
+      transition: background-color 180ms ease, color 180ms ease;
+    }
+
+    .bio-close:hover { background: var(--bg-accent); color: var(--ink); }
+    .bio-close:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .bio-close svg { width: 18px; height: 18px; }
+
+    .bio-dialog-head { display: flex; align-items: center; gap: 20px; padding-right: 32px; }
+    .member-photo--lg { width: 96px; height: 96px; margin: 0; }
+
+    .bio-dialog-name {
+      font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.015em;
+      line-height: 1.2;
+      margin-bottom: 6px;
+    }
+
+    .bio-dialog .member-tags { justify-content: flex-start; margin-top: 20px; }
+
+    .bio-dialog-body {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+      font-size: 15.5px;
+      line-height: 1.7;
+      color: var(--ink-soft);
+    }
+
+    .bio-dialog-body p + p { margin-top: 12px; }
+
+    @media (max-width: 1100px) {
+      .member-grid--core { --cols: 3; }
+      .capabilities { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 900px) {
+      .member-grid { --cols: 2; }
+      .partner-band { grid-template-columns: 1fr; gap: 24px; padding: 36px 32px; }
+      .partner-logo { padding-right: 0; padding-bottom: 24px; border-right: 0; border-bottom: 1px solid rgba(255, 255, 255, 0.14); }
+    }
+
+    @media (max-width: 640px) {
+      .wrap.team-page { padding-top: 32px; padding-bottom: 64px; } /* beat the .wrap reset below */
+      .team-intro { margin-bottom: 40px; }
+      .capabilities { grid-template-columns: 1fr; gap: 12px; }
+      .capability { display: grid; grid-template-columns: auto 1fr; column-gap: 14px; padding: 18px; }
+      .capability .icon-badge { grid-row: span 2; margin-bottom: 0; }
+      .team-section .divider-label { margin: 48px auto 24px; }
+
+      .member-grid { --cols: 1; --gap: 14px; }
+      .member { flex-direction: row; align-items: flex-start; text-align: left; gap: 16px; padding: 18px; }
+      .member-photo { width: 76px; height: 76px; margin-bottom: 0; }
+      .member-body { align-items: flex-start; }
+      .member-tags { justify-content: flex-start; margin-top: 10px; }
+      .member-body > :nth-last-child(3) { margin-bottom: 14px; }
+
+      .partner-band { margin-top: 56px; padding: 32px 24px; text-align: center; }
+      .partner-logo img { margin: 0 auto; width: 140px; }
+      .partner-text { margin: 0 auto; }
+
+      .bio-dialog-inner { padding: 28px 22px 24px; }
+      .bio-dialog-head { gap: 16px; }
+      .member-photo--lg { width: 72px; height: 72px; }
+      .bio-dialog-name { font-size: 19px; }
+    }
+
     /* ---------- Mobile ---------- */
     @media (max-width: 900px) {
       .hero {
@@ -422,6 +985,38 @@
 
     @media (max-width: 640px) {
       .wrap { padding: 0 20px; }
+
+      .site-nav-inner {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 14px;
+        padding-top: 16px;
+        padding-bottom: 12px;
+      }
+
+      .tablist {
+        display: flex;
+        width: 100%;
+      }
+
+      .tab {
+        flex: 1 1 0;
+        min-width: 0;
+        min-height: 40px;
+        padding: 9px 8px;
+      }
+
+      /* .wrap above resets vertical padding; restore it for the hero */
+      .hero {
+        padding-top: 32px;
+        padding-bottom: 48px;
+      }
+
+      .placeholder {
+        min-height: max(360px, calc(100svh - 380px));
+        padding-top: 56px;
+        padding-bottom: 56px;
+      }
 
       .site-header {
         flex-direction: column;
@@ -458,9 +1053,25 @@
 </head>
 <body>
 
-  <div class="wrap top-logo">
-    <img class="brand-logo" src="assets/logo-dark.png" alt="Phenometric" />
-  </div>
+  <header class="site-nav">
+    <div class="wrap site-nav-inner">
+      <a class="brand-link" href="?tab=home" data-tab-link="home" aria-label="Phenometric home">
+        <img class="brand-logo" src="assets/logo-dark.png" alt="Phenometric" />
+      </a>
+
+      <nav aria-label="Primary">
+        <div class="tablist" role="tablist" aria-label="Site sections">
+          <span class="tab-indicator" aria-hidden="true"></span>
+          <a class="tab" id="tab-home" role="tab" href="?tab=home" data-tab="home" aria-controls="panel-home" aria-selected="true">Home</a>
+          <a class="tab" id="tab-team" role="tab" href="?tab=team" data-tab="team" aria-controls="panel-team" aria-selected="false" tabindex="-1">Team</a>
+          <a class="tab" id="tab-research" role="tab" href="?tab=research" data-tab="research" aria-controls="panel-research" aria-selected="false" tabindex="-1">Research</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+  <div class="tab-panel" id="panel-home" role="tabpanel" aria-labelledby="tab-home">
 
   <section class="wrap hero">
     <div class="hero-text">
@@ -530,6 +1141,293 @@
     </div>
   </section>
 
+  </div><!-- /#panel-home -->
+
+  <div class="tab-panel" id="panel-team" role="tabpanel" aria-labelledby="tab-team" hidden>
+    <div class="wrap team-page">
+
+      <header class="team-intro">
+        <div class="hero-eyebrow">The team</div>
+        <h1 class="hero-heading">The people behind Phenometric<span class="dot">.</span></h1>
+        <p class="section-lead">Core team in product, signal engineering and AI, supported by clinical and scientific experts.</p>
+        <a class="partner-chip" href="#partner">
+          <span>Clinical &amp; strategic partner</span>
+          <img src="assets/arc-logo.svg" width="57" height="22" alt="ARC Innovation, Sheba Medical Center" />
+        </a>
+      </header>
+
+      <section aria-labelledby="capabilities-heading">
+        <h2 id="capabilities-heading" class="visually-hidden">Capabilities</h2>
+        <ul class="capabilities">
+        <li class="capability">
+          <div class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><line x1="11" y1="18" x2="13" y2="18"/></svg></div>
+          <h3>Product</h3>
+          <p>20+ years building and scaling products</p>
+        </li>
+        <li class="capability">
+          <div class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h3l2.5-6 4 12 2.5-6H21"/></svg></div>
+          <h3>Signal &amp; measurement</h3>
+          <p>Signal / noise methodology and longitudinal measurement</p>
+        </li>
+        <li class="capability">
+          <div class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg></div>
+          <h3>AI &amp; data science</h3>
+          <p>Machine learning, modeling and personal baselines</p>
+        </li>
+        <li class="capability">
+          <div class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6v6h6v6h-6v6H9v-6H3V9h6z"/></svg></div>
+          <h3>Clinical &amp; scientific</h3>
+          <p>Neurology, medicine, clinical research and neuroscience</p>
+        </li>
+        </ul>
+      </section>
+
+      <section class="team-section" aria-labelledby="core-heading">
+        <h2 class="divider-label" id="core-heading">
+          <span class="line" aria-hidden="true"></span>
+          <span class="txt">Core team</span>
+          <span class="line" aria-hidden="true"></span>
+        </h2>
+        <div class="member-grid member-grid--core">
+        <article class="member" aria-labelledby="name-gadi-mikles">
+          <div class="member-photo">
+            <picture>
+              <source type="image/avif" srcset="assets/team/gadi-mikles-128.avif 1x, assets/team/gadi-mikles-256.avif 2x, assets/team/gadi-mikles-384.avif 3x" />
+              <source type="image/webp" srcset="assets/team/gadi-mikles-128.webp 1x, assets/team/gadi-mikles-256.webp 2x, assets/team/gadi-mikles-384.webp 3x" />
+              <img src="assets/team/gadi-mikles-128.jpg" srcset="assets/team/gadi-mikles-128.jpg 1x, assets/team/gadi-mikles-256.jpg 2x, assets/team/gadi-mikles-384.jpg 3x" width="112" height="112" alt="Gadi Mikles, Co-Founder &amp; CEO at Phenometric" loading="lazy" decoding="async" />
+            </picture>
+          </div>
+          <div class="member-body">
+            <h3 class="member-name" id="name-gadi-mikles">Gadi Mikles</h3>
+            <p class="member-role">Co-Founder &amp; CEO</p>
+            <ul class="member-tags" aria-label="Expertise"><li>Product</li><li>AI</li><li>Digital health</li><li>20+ years leadership</li></ul>
+            <!-- Placeholder bio derived from the Nov 2026 deck; replace with approved copy. -->
+            <div class="member-bio" id="bio-gadi-mikles" hidden><p>Gadi leads Phenometric&#x27;s strategy, product and partnerships, bringing more than 20 years of leadership in building and scaling products.</p><p>Gadi&#x27;s work spans AI and digital health, with a focus on turning new measurement science into products that clinicians, researchers and patients can rely on.</p></div>
+            <button class="bio-btn" type="button" aria-haspopup="dialog" aria-controls="bio-gadi-mikles">
+              Read bio<span class="visually-hidden"> of Gadi Mikles</span>
+              <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        </article>
+        <article class="member" aria-labelledby="name-gal-rom">
+          <div class="member-photo">
+            <picture>
+              <source type="image/avif" srcset="assets/team/gal-rom-128.avif 1x, assets/team/gal-rom-256.avif 2x, assets/team/gal-rom-384.avif 3x" />
+              <source type="image/webp" srcset="assets/team/gal-rom-128.webp 1x, assets/team/gal-rom-256.webp 2x, assets/team/gal-rom-384.webp 3x" />
+              <img src="assets/team/gal-rom-128.jpg" srcset="assets/team/gal-rom-128.jpg 1x, assets/team/gal-rom-256.jpg 2x, assets/team/gal-rom-384.jpg 3x" width="112" height="112" alt="Gal Rom, Co-Founder &amp; CTO at Phenometric" loading="lazy" decoding="async" />
+            </picture>
+          </div>
+          <div class="member-body">
+            <h3 class="member-name" id="name-gal-rom">Gal Rom</h3>
+            <p class="member-role">Co-Founder &amp; CTO</p>
+            <ul class="member-tags" aria-label="Expertise"><li>R&amp;D</li><li>Signal engineering</li><li>Regulated SaMD</li></ul>
+            <!-- Placeholder bio derived from the Nov 2026 deck; replace with approved copy. -->
+            <div class="member-bio" id="bio-gal-rom" hidden><p>Gal leads R&amp;D and engineering at Phenometric, from passive data collection on iOS and Android to the platform behind it.</p><p>Gal brings deep experience in signal engineering and in building regulated Software as a Medical Device (SaMD).</p></div>
+            <button class="bio-btn" type="button" aria-haspopup="dialog" aria-controls="bio-gal-rom">
+              Read bio<span class="visually-hidden"> of Gal Rom</span>
+              <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        </article>
+        <article class="member" aria-labelledby="name-matan-mizrachi">
+          <div class="member-photo">
+            <picture>
+              <source type="image/avif" srcset="assets/team/matan-mizrachi-128.avif 1x, assets/team/matan-mizrachi-256.avif 2x, assets/team/matan-mizrachi-384.avif 3x" />
+              <source type="image/webp" srcset="assets/team/matan-mizrachi-128.webp 1x, assets/team/matan-mizrachi-256.webp 2x, assets/team/matan-mizrachi-384.webp 3x" />
+              <img src="assets/team/matan-mizrachi-128.jpg" srcset="assets/team/matan-mizrachi-128.jpg 1x, assets/team/matan-mizrachi-256.jpg 2x, assets/team/matan-mizrachi-384.jpg 3x" width="112" height="112" alt="Matan Mizrachi, R&amp;D Lead at Phenometric" loading="lazy" decoding="async" />
+            </picture>
+          </div>
+          <div class="member-body">
+            <h3 class="member-name" id="name-matan-mizrachi">Matan Mizrachi</h3>
+            <p class="member-role">R&amp;D Lead</p>
+            <ul class="member-tags" aria-label="Expertise"><li>Signal processing</li><li>Analytics</li><li>Longitudinal measures</li></ul>
+            <!-- Placeholder bio derived from the Nov 2026 deck; replace with approved copy. -->
+            <div class="member-bio" id="bio-matan-mizrachi" hidden><p>Matan leads the signal-processing and analytics work that turns everyday smartphone interactions into longitudinal measures.</p><p>The focus is on separating meaningful change from day-to-day noise, so that each person&#x27;s baseline can be tracked reliably over time.</p></div>
+            <button class="bio-btn" type="button" aria-haspopup="dialog" aria-controls="bio-matan-mizrachi">
+              Read bio<span class="visually-hidden"> of Matan Mizrachi</span>
+              <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        </article>
+        <article class="member" aria-labelledby="name-adi-wilf-yarkoni">
+          <div class="member-photo">
+            <picture>
+              <source type="image/avif" srcset="assets/team/adi-wilf-yarkoni-128.avif 1x, assets/team/adi-wilf-yarkoni-256.avif 2x, assets/team/adi-wilf-yarkoni-384.avif 3x" />
+              <source type="image/webp" srcset="assets/team/adi-wilf-yarkoni-128.webp 1x, assets/team/adi-wilf-yarkoni-256.webp 2x, assets/team/adi-wilf-yarkoni-384.webp 3x" />
+              <img src="assets/team/adi-wilf-yarkoni-128.jpg" srcset="assets/team/adi-wilf-yarkoni-128.jpg 1x, assets/team/adi-wilf-yarkoni-256.jpg 2x, assets/team/adi-wilf-yarkoni-384.jpg 3x" width="112" height="112" alt="Dr. Adi Wilf-Yarkoni, Medical Lead at Phenometric" loading="lazy" decoding="async" />
+            </picture>
+          </div>
+          <div class="member-body">
+            <h3 class="member-name" id="name-adi-wilf-yarkoni">Dr. Adi Wilf-Yarkoni</h3>
+            <p class="member-role">Medical Lead</p>
+            <ul class="member-tags" aria-label="Expertise"><li>MS neurology</li><li>Clinical validation</li><li>Meaningful outcomes</li></ul>
+            <!-- Placeholder bio derived from the Nov 2026 deck; replace with approved copy. -->
+            <div class="member-bio" id="bio-adi-wilf-yarkoni" hidden><p>Dr. Wilf-Yarkoni brings clinical expertise in multiple sclerosis (MS) neurology and leads Phenometric&#x27;s clinical validation work.</p><p>That work keeps every measure anchored to outcomes that matter to patients and clinicians.</p></div>
+            <button class="bio-btn" type="button" aria-haspopup="dialog" aria-controls="bio-adi-wilf-yarkoni">
+              Read bio<span class="visually-hidden"> of Dr. Adi Wilf-Yarkoni</span>
+              <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        </article>
+        <article class="member" aria-labelledby="name-dovi-yellin">
+          <div class="member-photo">
+            <picture>
+              <source type="image/avif" srcset="assets/team/dovi-yellin-128.avif 1x, assets/team/dovi-yellin-256.avif 2x, assets/team/dovi-yellin-384.avif 3x" />
+              <source type="image/webp" srcset="assets/team/dovi-yellin-128.webp 1x, assets/team/dovi-yellin-256.webp 2x, assets/team/dovi-yellin-384.webp 3x" />
+              <img src="assets/team/dovi-yellin-128.jpg" srcset="assets/team/dovi-yellin-128.jpg 1x, assets/team/dovi-yellin-256.jpg 2x, assets/team/dovi-yellin-384.jpg 3x" width="112" height="112" alt="Dr. Dovi Yellin, Neuroscience Lead at Phenometric" loading="lazy" decoding="async" />
+            </picture>
+          </div>
+          <div class="member-body">
+            <h3 class="member-name" id="name-dovi-yellin">Dr. Dovi Yellin</h3>
+            <p class="member-role">Neuroscience Lead</p>
+            <ul class="member-tags" aria-label="Expertise"><li>Neuroscience</li><li>Cognition &amp; motor</li><li>Experimental rigor</li></ul>
+            <!-- Placeholder bio derived from the Nov 2026 deck; replace with approved copy. -->
+            <div class="member-bio" id="bio-dovi-yellin" hidden><p>Dr. Yellin leads Phenometric&#x27;s neuroscience across cognitive and motor function.</p><p>Dr. Yellin brings experimental rigor to how digital signals are defined, tested and interpreted against established neurological measures.</p></div>
+            <button class="bio-btn" type="button" aria-haspopup="dialog" aria-controls="bio-dovi-yellin">
+              Read bio<span class="visually-hidden"> of Dr. Dovi Yellin</span>
+              <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        </article>
+        </div>
+      </section>
+
+      <section class="team-section" aria-labelledby="network-heading">
+        <h2 class="divider-label" id="network-heading">
+          <span class="line" aria-hidden="true"></span>
+          <span class="txt">Clinical &amp; advisory network <span class="pill-soft">Expanding</span></span>
+          <span class="line" aria-hidden="true"></span>
+        </h2>
+        <div class="member-grid">
+        <!-- HIDDEN pending consent: remove the "hidden" attribute to publish. -->
+        <article class="member" aria-labelledby="name-tali-drori" hidden>
+          <div class="member-photo">
+            <picture>
+              <source type="image/avif" srcset="assets/team/tali-drori-128.avif?v=2 1x, assets/team/tali-drori-256.avif?v=2 2x, assets/team/tali-drori-384.avif?v=2 3x" />
+              <source type="image/webp" srcset="assets/team/tali-drori-128.webp?v=2 1x, assets/team/tali-drori-256.webp?v=2 2x, assets/team/tali-drori-384.webp?v=2 3x" />
+              <img src="assets/team/tali-drori-128.jpg?v=2" srcset="assets/team/tali-drori-128.jpg?v=2 1x, assets/team/tali-drori-256.jpg?v=2 2x, assets/team/tali-drori-384.jpg?v=2 3x" width="112" height="112" alt="Dr. Tali Drori, Clinical Investigator at Sheba Hospital" loading="lazy" decoding="async" />
+            </picture>
+          </div>
+          <div class="member-body">
+            <h3 class="member-name" id="name-tali-drori">Dr. Tali Drori</h3>
+            <p class="member-role">Clinical Investigator</p>
+            <p class="member-affil">Sheba Hospital</p>
+            <!-- Placeholder bio derived from the Nov 2026 deck; replace with approved copy. -->
+            <div class="member-bio" id="bio-tali-drori" hidden><p>Dr. Drori is a clinical investigator at Sheba Hospital, where Phenometric&#x27;s multiple sclerosis (MS) research is under way.</p><p>The collaboration focuses on measurement reliability and on how passive signals track treatment response.</p></div>
+            <button class="bio-btn" type="button" aria-haspopup="dialog" aria-controls="bio-tali-drori">
+              Read bio<span class="visually-hidden"> of Dr. Tali Drori</span>
+              <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        </article>
+        <!-- HIDDEN pending consent: remove the "hidden" attribute to publish. -->
+        <article class="member" aria-labelledby="name-ruth-djaldetti" hidden>
+          <div class="member-photo">
+            <picture>
+              <source type="image/avif" srcset="assets/team/ruth-djaldetti-128.avif 1x, assets/team/ruth-djaldetti-256.avif 2x, assets/team/ruth-djaldetti-384.avif 3x" />
+              <source type="image/webp" srcset="assets/team/ruth-djaldetti-128.webp 1x, assets/team/ruth-djaldetti-256.webp 2x, assets/team/ruth-djaldetti-384.webp 3x" />
+              <img src="assets/team/ruth-djaldetti-128.jpg" srcset="assets/team/ruth-djaldetti-128.jpg 1x, assets/team/ruth-djaldetti-256.jpg 2x, assets/team/ruth-djaldetti-384.jpg 3x" width="112" height="112" alt="Prof. Ruth Djaldetti, Clinical Investigator at Beilinson Hospital" loading="lazy" decoding="async" />
+            </picture>
+          </div>
+          <div class="member-body">
+            <h3 class="member-name" id="name-ruth-djaldetti">Prof. Ruth Djaldetti</h3>
+            <p class="member-role">Clinical Investigator</p>
+            <p class="member-affil">Beilinson Hospital</p>
+            <!-- Placeholder bio derived from the Nov 2026 deck; replace with approved copy. -->
+            <div class="member-bio" id="bio-ruth-djaldetti" hidden><p>Prof. Djaldetti is a clinical investigator at Beilinson Hospital, the site of Phenometric&#x27;s planned Parkinson&#x27;s disease (PD) study.</p><p>The study will examine how everyday smartphone interactions reflect motor and cognitive change over time.</p></div>
+            <button class="bio-btn" type="button" aria-haspopup="dialog" aria-controls="bio-ruth-djaldetti">
+              Read bio<span class="visually-hidden"> of Prof. Ruth Djaldetti</span>
+              <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        </article>
+        <article class="member" aria-labelledby="name-noa-avisar">
+          <div class="member-photo">
+            <picture>
+              <source type="image/avif" srcset="assets/team/noa-avisar-128.avif 1x, assets/team/noa-avisar-256.avif 2x, assets/team/noa-avisar-384.avif 3x" />
+              <source type="image/webp" srcset="assets/team/noa-avisar-128.webp 1x, assets/team/noa-avisar-256.webp 2x, assets/team/noa-avisar-384.webp 3x" />
+              <img src="assets/team/noa-avisar-128.jpg" srcset="assets/team/noa-avisar-128.jpg 1x, assets/team/noa-avisar-256.jpg 2x, assets/team/noa-avisar-384.jpg 3x" width="112" height="112" alt="Dr. Noa Avisar, Clinical &amp; Regulatory Affairs Advisor at Phenometric" loading="lazy" decoding="async" />
+            </picture>
+          </div>
+          <div class="member-body">
+            <h3 class="member-name" id="name-noa-avisar">Dr. Noa Avisar</h3>
+            <p class="member-role">Advisor</p>
+            <p class="member-affil">Clinical &amp; Regulatory Affairs</p>
+            <!-- Placeholder bio derived from the Nov 2026 deck; replace with approved copy. -->
+            <div class="member-bio" id="bio-noa-avisar" hidden><p>Dr. Avisar advises Phenometric on clinical and regulatory affairs.</p><p>Dr. Avisar&#x27;s guidance helps shape the path from validation studies to regulatory readiness.</p></div>
+            <button class="bio-btn" type="button" aria-haspopup="dialog" aria-controls="bio-noa-avisar">
+              Read bio<span class="visually-hidden"> of Dr. Noa Avisar</span>
+              <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        </article>
+        <article class="member" aria-labelledby="name-tami-yardeni">
+          <div class="member-photo">
+            <picture>
+              <source type="image/avif" srcset="assets/team/tami-yardeni-128.avif?v=2 1x, assets/team/tami-yardeni-256.avif?v=2 2x, assets/team/tami-yardeni-384.avif?v=2 3x" />
+              <source type="image/webp" srcset="assets/team/tami-yardeni-128.webp?v=2 1x, assets/team/tami-yardeni-256.webp?v=2 2x, assets/team/tami-yardeni-384.webp?v=2 3x" />
+              <img src="assets/team/tami-yardeni-128.jpg?v=2" srcset="assets/team/tami-yardeni-128.jpg?v=2 1x, assets/team/tami-yardeni-256.jpg?v=2 2x, assets/team/tami-yardeni-384.jpg?v=2 3x" width="112" height="112" alt="Tami Yardeni, CNS Clinical Development Advisor at Phenometric" loading="lazy" decoding="async" />
+            </picture>
+          </div>
+          <div class="member-body">
+            <h3 class="member-name" id="name-tami-yardeni">Tami Yardeni</h3>
+            <p class="member-role">Advisor</p>
+            <p class="member-affil">CNS Clinical Development</p>
+            <!-- Placeholder bio derived from the Nov 2026 deck; replace with approved copy. -->
+            <div class="member-bio" id="bio-tami-yardeni" hidden><p>Tami advises Phenometric on clinical development for central nervous system (CNS) disorders.</p><p>Tami&#x27;s input informs study design and the evidence strategy behind Phenometric&#x27;s validation programme.</p></div>
+            <button class="bio-btn" type="button" aria-haspopup="dialog" aria-controls="bio-tami-yardeni">
+              Read bio<span class="visually-hidden"> of Tami Yardeni</span>
+              <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        </article>
+        </div>
+      </section>
+
+      <section class="partner-band" id="partner" aria-labelledby="partner-heading">
+        <div class="partner-logo">
+          <img src="assets/arc-logo.svg" width="168" height="65" alt="ARC Innovation, Sheba Medical Center" />
+        </div>
+        <div class="partner-copy">
+          <p class="partner-eyebrow">Clinical &amp; strategic partner</p>
+          <h2 class="partner-heading" id="partner-heading">Sheba Medical Center &ndash; ARC Innovation</h2>
+          <p class="partner-text">A strategic collaboration taking Phenometric from clinical validation to real-world adoption.</p>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <div class="tab-panel" id="panel-research" role="tabpanel" aria-labelledby="tab-research" hidden>
+    <section class="wrap placeholder">
+      <div class="icon-badge" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="20" x2="6" y2="12"/><line x1="12" y1="20" x2="12" y2="6"/><line x1="18" y1="20" x2="18" y2="15"/></svg>
+      </div>
+      <div class="hero-eyebrow">Research</div>
+      <h1 class="placeholder-heading">Coming soon<span class="dot">.</span></h1>
+      <p class="section-lead">Clinical research updates will be published here.</p>
+    </section>
+  </div>
+  </main>
+
+  <dialog class="bio-dialog" id="bio-dialog" aria-labelledby="bio-dialog-name">
+    <div class="bio-dialog-inner">
+      <button class="bio-close" type="button" data-close aria-label="Close bio">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <div class="bio-dialog-head">
+        <div class="member-photo member-photo--lg" data-slot="photo"></div>
+        <div>
+          <h2 class="bio-dialog-name" id="bio-dialog-name" data-slot="name"></h2>
+          <p class="member-role" data-slot="role"></p>
+          <p class="member-affil" data-slot="affil"></p>
+        </div>
+      </div>
+      <ul class="member-tags" data-slot="tags"></ul>
+      <div class="bio-dialog-body" data-slot="bio"></div>
+    </div>
+  </dialog>
+
   <div class="bottom-panel">
     <section class="wrap cta-section">
       <p class="cta-lead-strong">Phenometric is currently engaging with selected investors and strategic partners.</p>
@@ -560,6 +1458,163 @@
 
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    // ---------- Tabs ----------
+    (function () {
+      var TABS = ['home', 'team', 'research'];
+      var TITLES = { home: 'Phenometric', team: 'Team \u2014 Phenometric', research: 'Research \u2014 Phenometric' };
+      var root = document.documentElement;
+      var nav = document.querySelector('.site-nav');
+      var list = document.querySelector('[role="tablist"]');
+      var tabs = Array.prototype.slice.call(list.querySelectorAll('[role="tab"]'));
+      var indicator = list.querySelector('.tab-indicator');
+      var scrollByTab = {};            // remember scroll position per tab
+      var current = null;
+
+      function tabFromUrl() {
+        var t = new URLSearchParams(window.location.search).get('tab');
+        return TABS.indexOf(t) > -1 ? t : 'home';
+      }
+
+      function moveIndicator() {
+        var active = list.querySelector('[aria-selected="true"]');
+        if (!active) return;
+        indicator.style.width = active.offsetWidth + 'px';
+        indicator.style.transform = 'translateX(' + active.offsetLeft + 'px)';
+      }
+
+      function activate(name, opts) {
+        opts = opts || {};
+        if (TABS.indexOf(name) === -1) name = 'home';
+        var prev = current;
+        if (prev) scrollByTab[prev] = window.scrollY;
+
+        current = name;
+        root.setAttribute('data-tab', name);
+
+        tabs.forEach(function (tab) {
+          var on = tab.getAttribute('data-tab') === name;
+          var panel = document.getElementById(tab.getAttribute('aria-controls'));
+          tab.setAttribute('aria-selected', on ? 'true' : 'false');
+          tab.tabIndex = on ? 0 : -1;
+          panel.hidden = !on;
+          if (on && prev && prev !== name) {
+            panel.classList.remove('is-entering');
+            void panel.offsetWidth;    // restart animation
+            panel.classList.add('is-entering');
+          }
+        });
+
+        document.title = TITLES[name];
+        moveIndicator();
+
+        if (opts.push) {
+          var url = new URL(window.location.href);
+          url.hash = '';
+          if (name === 'home') url.searchParams.delete('tab');
+          else url.searchParams.set('tab', name);
+          if (url.href !== window.location.href) history.pushState({ tab: name }, '', url);
+        }
+
+        if (prev && prev !== name) window.scrollTo(0, scrollByTab[name] || 0);
+      }
+
+      function isPlainClick(e) {
+        return e.button === 0 && !e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey;
+      }
+
+      // Tabs + logo: switch in place; modified clicks (new tab/window) behave as normal links
+      document.querySelectorAll('[role="tab"], [data-tab-link]').forEach(function (el) {
+        el.addEventListener('click', function (e) {
+          if (!isPlainClick(e)) return;
+          e.preventDefault();
+          activate(el.getAttribute('data-tab') || el.getAttribute('data-tab-link'), { push: true });
+        });
+      });
+
+      // Keyboard: Left/Right/Home/End (WAI-ARIA tabs pattern, automatic activation)
+      list.addEventListener('keydown', function (e) {
+        var i = tabs.indexOf(document.activeElement);
+        if (i === -1) return;
+        var next = null;
+        if (e.key === 'ArrowRight') next = (i + 1) % tabs.length;
+        else if (e.key === 'ArrowLeft') next = (i - 1 + tabs.length) % tabs.length;
+        else if (e.key === 'Home') next = 0;
+        else if (e.key === 'End') next = tabs.length - 1;
+        else if (e.key === ' ') { e.preventDefault(); activate(tabs[i].getAttribute('data-tab'), { push: true }); return; }
+        if (next === null) return;
+        e.preventDefault();
+        tabs[next].focus();
+        activate(tabs[next].getAttribute('data-tab'), { push: true });
+      });
+
+      // Back / forward
+      window.addEventListener('popstate', function () { activate(tabFromUrl()); });
+
+      // Keep the indicator aligned
+      window.addEventListener('resize', moveIndicator);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(moveIndicator);
+
+      // Subtle border on the sticky nav once the page scrolls
+      function onScroll() { nav.classList.toggle('is-scrolled', window.scrollY > 4); }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+
+      activate(tabFromUrl());
+      requestAnimationFrame(function () {
+        moveIndicator();
+        list.classList.add('is-ready');
+      });
+    })();
+
+    // ---------- Team bios (modal) ----------
+    (function () {
+      var root = document.documentElement;
+      var dialog = document.getElementById('bio-dialog');
+      var supportsDialog = dialog && typeof dialog.showModal === 'function';
+      function slot(name) { return dialog.querySelector('[data-slot="' + name + '"]'); }
+
+      function fill(card) {
+        var get = function (sel) { return card.querySelector(sel); };
+        slot('photo').innerHTML = get('.member-photo').innerHTML;
+        slot('name').textContent = get('.member-name').textContent;
+        slot('role').textContent = get('.member-role').textContent;
+        var affil = get('.member-affil');
+        slot('affil').textContent = affil ? affil.textContent : '';
+        slot('affil').hidden = !affil;
+        var tags = get('.member-tags');
+        slot('tags').innerHTML = tags ? tags.innerHTML : '';
+        slot('tags').hidden = !tags;
+        slot('bio').innerHTML = get('.member-bio').innerHTML;
+      }
+
+      document.querySelectorAll('.bio-btn').forEach(function (btn) {
+        if (!supportsDialog) {
+          // Fallback: expand the bio inline
+          btn.setAttribute('aria-expanded', 'false');
+          btn.removeAttribute('aria-haspopup');
+          btn.addEventListener('click', function () {
+            var bio = document.getElementById(btn.getAttribute('aria-controls'));
+            var open = bio.hidden;
+            bio.hidden = !open;
+            btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+          });
+          return;
+        }
+        btn.addEventListener('click', function () {
+          fill(btn.closest('.member'));
+          dialog.showModal();
+          root.classList.add('has-modal');
+        });
+      });
+
+      if (!supportsDialog) return;
+      dialog.addEventListener('close', function () { root.classList.remove('has-modal'); });
+      dialog.addEventListener('click', function (e) {
+        if (e.target === dialog || e.target.closest('[data-close]')) dialog.close();
+      });
+      window.addEventListener('popstate', function () { if (dialog.open) dialog.close(); });
+    })();
   </script>
 </body>
 </html>
