@@ -139,7 +139,27 @@
       font-size: 11.5px; font-weight: 600; color: var(--accent-dark);
     }
     .badge-detect::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
-    .chart-card svg { width: 100%; height: auto; margin-top: 14px; }
+    .chart-card svg { width: 100%; height: auto; margin-top: 6px; }
+    .hc-legend { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+    .hc-legend button {
+      display: inline-flex; align-items: center; gap: 7px; padding: 5px 10px 5px 9px;
+      border: 1px solid var(--line); border-radius: 999px; background: #fff; cursor: pointer;
+      font: 500 12px 'Inter', sans-serif; color: var(--ink-soft); transition: border-color .2s, opacity .2s, background .2s;
+    }
+    .hc-legend button:hover, .hc-legend button.is-on { border-color: #c9d5e2; background: var(--bg-soft); }
+    .hc-legend i { width: 14px; height: 3px; border-radius: 2px; background: var(--c); }
+    .hc-legend b { font-weight: 700; color: var(--accent-dark); }
+    .hc-svg .ln { fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; transition: opacity .25s, stroke-width .25s; }
+    .hc-svg .dot-det { transition: opacity .25s; }
+    .hc-svg.focus .ln, .hc-svg.focus .det { opacity: .14; }
+    .hc-svg.focus .ln.on { opacity: 1; stroke-width: 2.8; }
+    .hc-svg.focus .det.on { opacity: 1; }
+    .hc-svg .det { opacity: 0; transition: opacity .4s; }
+    .hc-svg.drawn .det { opacity: 1; }
+    .hc-svg.drawn.focus .det { opacity: .14; }
+    .hc-svg.drawn.focus .det.on { opacity: 1; }
+    .hc-svg .det-lbl { font: 600 9.5px 'Inter', sans-serif; }
+    @keyframes hc-draw { to { stroke-dashoffset: 0; } }
     .chart-foot { margin-top: 8px; text-align: right; font-size: 11px; color: var(--muted); }
     .svg-label { font: 500 10px 'Inter', sans-serif; fill: var(--muted); }
 
@@ -405,30 +425,24 @@
           </ul>
         </div>
 
-        <figure class="chart-card" aria-label="Illustrative chart: fine motor speed rises above a personal baseline after an intervention starts">
+        <figure class="chart-card" id="hero-chart" aria-labelledby="hc-title hc-desc">
           <div class="chart-card-head">
             <div>
-              <div class="chart-kicker">Participant 014 · Motor domain</div>
-              <div class="chart-title">Fine motor speed</div>
+              <div class="chart-kicker">Participant P-014 · 12 weeks · passive</div>
+              <div class="chart-title" id="hc-title">Daily brain function vs. personal baseline</div>
             </div>
-            <span class="badge-detect">Change detected · +12% vs baseline</span>
+            <span class="badge-detect" id="hc-badge">Change detected · 3 domains</span>
           </div>
-          <svg viewBox="0 0 440 200" aria-hidden="true">
-            <line x1="20" y1="40" x2="420" y2="40" stroke="#eef2f6"/>
-            <line x1="20" y1="100" x2="420" y2="100" stroke="#eef2f6"/>
-            <line x1="20" y1="165" x2="420" y2="165" stroke="#e4eaf1"/>
-            <rect x="20" y="92" width="400" height="34" fill="#1f9cae" opacity=".10"/>
-            <text class="svg-label" x="24" y="86">Personal baseline</text>
-            <line x1="210" y1="22" x2="210" y2="165" stroke="#8493ab" stroke-dasharray="3 4"/>
-            <text class="svg-label" x="216" y="30">Intervention start</text>
-            <path d="M20 110 C35 104 45 116 60 112 S85 100 100 106 S125 118 140 108 S165 100 180 110 S200 116 210 110
-                     C240 92 260 76 290 64 S340 50 360 48 S400 44 420 42" fill="none" stroke="#1f9cae" stroke-width="2.2" stroke-linecap="round"/>
-            <circle cx="420" cy="42" r="3.5" fill="#1f9cae"/>
-            <text class="svg-label" x="20" y="185">Week 1</text>
-            <text class="svg-label" x="210" y="185" text-anchor="middle">Week 6</text>
-            <text class="svg-label" x="420" y="185" text-anchor="end">Week 12</text>
-          </svg>
-          <figcaption class="chart-foot">Product concept · illustrative data</figcaption>
+          <p class="visually-hidden" id="hc-desc">After treatment starts in week 4, fine motor speed, alertness and language quality each rise above the participant's personal baseline band, at different times.</p>
+
+          <ul class="hc-legend" role="list">
+            <li><button type="button" data-k="motor"><i style="--c:#1f9cae"></i><span>Fine motor speed</span><b data-delta="motor"></b></button></li>
+            <li><button type="button" data-k="alert"><i style="--c:#0b2545"></i><span>Alertness</span><b data-delta="alert"></b></button></li>
+            <li><button type="button" data-k="lang"><i style="--c:#7b6fd6"></i><span>Language quality</span><b data-delta="lang"></b></button></li>
+          </ul>
+
+          <svg class="hc-svg" viewBox="0 0 460 220" aria-hidden="true"></svg>
+          <figcaption class="chart-foot">Anonymized example from ongoing studies</figcaption>
         </figure>
       </div>
     </section>
@@ -804,6 +818,102 @@
 
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    // ---------- Hero chart: three domains vs. personal baseline ----------
+    // Values = % change vs. the participant's personal baseline, twice per week (25 points, weeks 0-12).
+    // TODO: replace with the actual anonymized series before publishing.
+    (function () {
+      var DATA = {
+        motor: { c: '#1f9cae', label: 'Fine motor', v: [0,2,-1,1,-2,1,0,-1,1, 2,3,4.6,5,4.8,5.3,5,5.4,5.1,5.3,5,5.5,5.2,5.4,5.1,5.3] },
+        alert: { c: '#0b2545', label: 'Alertness',  v: [1,-2,0,2,-1,0,-6,1,0, 1,2,4,3,6,7,6,8,9,8,9,10,9,9,10,9] },
+        lang:  { c: '#7b6fd6', label: 'Language',   v: [-1,1,0,-1,1,0,-1,1,0, 0,1,1,2,3,3,4,5,6,6,7,7,8,8,7,8] }
+      };
+      var START = 8, BAND = 4, YMIN = -10, YMAX = 16;          // treatment starts at point 8 (week 4)
+      var X0 = 30, X1 = 450, Y0 = 18, Y1 = 180;
+      var svg = document.querySelector('#hero-chart .hc-svg');
+      if (!svg) return;
+      var NS = 'http://www.w3.org/2000/svg';
+      var n = DATA.motor.v.length;
+      function x(i) { return X0 + (X1 - X0) * i / (n - 1); }
+      function y(v) { return Y1 - (Y1 - Y0) * (v - YMIN) / (YMAX - YMIN); }
+      function el(tag, attrs, parent) {
+        var e = document.createElementNS(NS, tag);
+        for (var k in attrs) e.setAttribute(k, attrs[k]);
+        (parent || svg).appendChild(e); return e;
+      }
+      function smooth(pts) {                                     // Catmull-Rom -> cubic Bezier
+        var d = 'M' + pts[0][0] + ' ' + pts[0][1];
+        for (var i = 0; i < pts.length - 1; i++) {
+          var p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || p2;
+          d += ' C' + (p1[0] + (p2[0] - p0[0]) / 6).toFixed(1) + ' ' + (p1[1] + (p2[1] - p0[1]) / 6).toFixed(1) +
+               ' ' + (p2[0] - (p3[0] - p1[0]) / 6).toFixed(1) + ' ' + (p2[1] - (p3[1] - p1[1]) / 6).toFixed(1) +
+               ' ' + p2[0].toFixed(1) + ' ' + p2[1].toFixed(1);
+        }
+        return d;
+      }
+
+      // Frame: baseline band, zero line, treatment marker, axis labels
+      el('rect', { x: X0, y: y(BAND), width: X1 - X0, height: y(-BAND) - y(BAND), fill: '#1f9cae', opacity: .08, rx: 3 });
+      el('line', { x1: X0, x2: X1, y1: y(0), y2: y(0), stroke: '#c9d5e2', 'stroke-dasharray': '2 4' });
+      el('text', { x: X1 - 4, y: y(-BAND) - 5, class: 'svg-label', 'text-anchor': 'end' }).textContent = 'Personal baseline band';
+      el('line', { x1: x(START), x2: x(START), y1: Y0 - 6, y2: Y1, stroke: '#8493ab', 'stroke-dasharray': '3 4' });
+      el('text', { x: x(START) + 6, y: Y0 - 1, class: 'svg-label' }).textContent = 'Treatment start';
+      el('line', { x1: X0, x2: X1, y1: Y1, y2: Y1, stroke: '#e4eaf1' });
+      [[0, 'Week 0', 'start'], [12, 'Week 6', 'middle'], [24, 'Week 12', 'end']].forEach(function (t) {
+        el('text', { x: x(t[0]), y: Y1 + 18, class: 'svg-label', 'text-anchor': t[2] }).textContent = t[1];
+      });
+      el('text', { x: X0 - 6, y: y(12) + 3, class: 'svg-label', 'text-anchor': 'end' }).textContent = '+12%';
+      el('text', { x: X0 - 6, y: y(0) + 3, class: 'svg-label', 'text-anchor': 'end' }).textContent = '0';
+
+      // A dip worth annotating: one bad night shows as a short alertness drop that is NOT flagged
+      var dipI = DATA.alert.v.indexOf(Math.min.apply(null, DATA.alert.v));
+      el('text', { x: x(dipI), y: y(DATA.alert.v[dipI]) + 14, class: 'svg-label', 'text-anchor': 'middle' }).textContent = 'Poor-sleep day · filtered';
+
+      var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var keys = Object.keys(DATA), delay = 0;
+      keys.forEach(function (k) {
+        var d = DATA[k], pts = d.v.map(function (v, i) { return [x(i), y(v)]; });
+        var path = el('path', { d: smooth(pts), class: 'ln', stroke: d.c, 'data-k': k });
+        if (!reduce) {
+          var len = path.getTotalLength();
+          path.style.strokeDasharray = len; path.style.strokeDashoffset = len;
+          path.style.animation = 'hc-draw 1.6s cubic-bezier(.4,0,.2,1) ' + delay + 's forwards';
+          delay += .25;
+        }
+        // Detection = first point after treatment from which the signal stays above the baseline band
+        var det = -1;
+        for (var i = START; i < n; i++) {
+          if (d.v.slice(i).every(function (v) { return v > BAND; })) { det = i; break; }
+        }
+        if (det > -1) {
+          var g = el('g', { class: 'det', 'data-k': k });
+          el('circle', { cx: x(det), cy: y(d.v[det]), r: 7, fill: d.c, opacity: .15 }, g);
+          el('circle', { cx: x(det), cy: y(d.v[det]), r: 3.5, fill: '#fff', stroke: d.c, 'stroke-width': 2 }, g);
+          var wk = Math.round(det / 2);
+          el('text', { x: x(det), y: y(d.v[det]) + 17, class: 'det-lbl', fill: d.c, 'text-anchor': 'middle' }, g).textContent = 'Wk ' + wk;
+        }
+        // Legend delta = mean of the last 4 points
+        var tail = d.v.slice(-4), m = tail.reduce(function (a, b) { return a + b; }, 0) / tail.length;
+        var out = document.querySelector('[data-delta="' + k + '"]');
+        if (out) out.textContent = (m >= 0 ? '+' : '') + Math.round(m) + '%';
+      });
+      setTimeout(function () { svg.classList.add('drawn'); }, reduce ? 0 : (delay + 1.2) * 1000);
+
+      // Legend: hover / focus / tap highlights one domain
+      var btns = document.querySelectorAll('#hero-chart .hc-legend button'), locked = null;
+      function focus(k) {
+        svg.classList.toggle('focus', !!k);
+        svg.querySelectorAll('[data-k]').forEach(function (e) { e.classList.toggle('on', e.getAttribute('data-k') === k); });
+        btns.forEach(function (b) { b.classList.toggle('is-on', b.getAttribute('data-k') === k); b.setAttribute('aria-pressed', b.getAttribute('data-k') === k); });
+      }
+      btns.forEach(function (b) {
+        var k = b.getAttribute('data-k');
+        b.setAttribute('aria-pressed', 'false');
+        b.addEventListener('mouseenter', function () { if (!locked) focus(k); });
+        b.addEventListener('mouseleave', function () { if (!locked) focus(null); });
+        b.addEventListener('click', function () { locked = locked === k ? null : k; focus(locked); });
+      });
+    })();
 
     // Sticky nav border once the page scrolls
     (function () {
