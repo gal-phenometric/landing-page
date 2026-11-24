@@ -504,12 +504,12 @@
             </div>
             <span class="badge-detect" id="hc-badge">Change detected in 3 domains</span>
           </div>
-          <p class="visually-hidden" id="hc-desc">After treatment starts in week 4, fine motor speed, alertness and language quality each rise above the participant's personal baseline band, at different times.</p>
+          <p class="visually-hidden" id="hc-desc">After treatment starts in week 4, psychomotor function, alertness and executive function each rise above the participant's personal baseline band, at different times.</p>
 
           <ul class="hc-legend" role="list">
-            <li><button type="button" data-k="motor"><i style="--c:#1f9cae"></i><span>Fine motor speed</span><b data-delta="motor"></b></button></li>
+            <li><button type="button" data-k="motor"><i style="--c:#1f9cae"></i><span>Psychomotor function</span><b data-delta="motor"></b></button></li>
             <li><button type="button" data-k="alert"><i style="--c:#0b2545"></i><span>Alertness</span><b data-delta="alert"></b></button></li>
-            <li><button type="button" data-k="lang"><i style="--c:#7b6fd6"></i><span>Language quality</span><b data-delta="lang"></b></button></li>
+            <li><button type="button" data-k="lang"><i style="--c:#7b6fd6"></i><span>Executive function</span><b data-delta="lang"></b></button></li>
           </ul>
 
           <svg class="hc-svg" viewBox="0 0 460 220" aria-hidden="true"></svg>
@@ -855,9 +855,9 @@
     // TODO: replace with the actual anonymized series before publishing.
     (function () {
       var DATA = {
-        motor: { c: '#1f9cae', label: 'Fine motor', v: [0,2,-1,1,-2,1,0,-1,1, 2,3,4.6,5,4.8,5.3,5,5.4,5.1,5.3,5,5.5,5.2,5.4,5.1,5.3] },
+        motor: { c: '#1f9cae', label: 'Psychomotor', v: [0,2,-1,1,-2,1,0,-1,1, 2,3,4.6,5,4.8,5.3,5,5.4,5.1,5.3,5,5.5,5.2,5.4,5.1,5.3] },
         alert: { c: '#0b2545', label: 'Alertness',  v: [1,-2,0,2,-1,0,-6,1,0, 1,2,4,3,6,7,6,8,9,8,9,10,9,9,10,9] },
-        lang:  { c: '#7b6fd6', label: 'Language',   v: [-1,1,0,-1,1,0,-1,1,0, 0,1,1,2,3,3,4,5,6,6,7,7,8,8,7,8] }
+        lang:  { c: '#7b6fd6', label: 'Executive',   v: [-1,1,0,-1,1,0,-1,1,0, 0,1,1,2,3,3,4,5,6,6,7,7,8,8,7,8] }
       };
       var START = 8, BAND = 4, YMIN = -10, YMAX = 16;          // treatment starts at point 8 (week 4)
       var X0 = 30, X1 = 450, Y0 = 18, Y1 = 180;
