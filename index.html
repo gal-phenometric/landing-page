@@ -92,12 +92,14 @@
 
     /* "change" emphasis: teal word with a signal line that steps up past baseline */
     .hl-change { position: relative; color: var(--accent); white-space: nowrap; }
-    .hl-change svg { position: absolute; left: -2%; bottom: -.16em; width: 104%; height: .32em; overflow: visible; }
-    .hl-change path { fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; opacity: .55;
-      stroke-dasharray: 260; stroke-dashoffset: 260; animation: hl-draw 1.4s .4s cubic-bezier(.4,0,.2,1) forwards; }
-    .hl-change circle { fill: currentColor; opacity: 0; animation: hl-pop .3s 1.7s forwards; }
+    .hl-change svg.mark { position: absolute; left: -1%; bottom: -.27em; width: 102%; height: .36em; overflow: visible; pointer-events: none; }
+    .hl-change .mark path { stroke-dasharray: 220; stroke-dashoffset: 220; animation: hl-draw 1.3s cubic-bezier(.4,0,.2,1) forwards; }
+    .hl-change .mark path:nth-child(2) { animation-delay: .12s; }
+    .hl-change .mark path:nth-child(3) { animation-delay: .24s; }
+    .hl-change .mark circle { opacity: 0; animation: hl-pop .35s ease-out forwards; animation-delay: calc(1.05s + var(--i) * 45ms); }
     @keyframes hl-draw { to { stroke-dashoffset: 0; } }
-    @keyframes hl-pop { to { opacity: 1; } }
+    @keyframes hl-pop { from { opacity: 0; transform: translateX(-3px); } to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: reduce) { .hl-change .mark path { stroke-dashoffset: 0; } .hl-change .mark circle { opacity: 1; } }
 
     /* Scroll reveal (only when JS runs) */
     .js .reveal { opacity: 0; transform: translateY(14px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1); }
@@ -170,7 +172,7 @@
     @keyframes pulse { 0% { transform: scale(.5); opacity: .7; } 100% { transform: scale(1.6); opacity: 0; } }
     .hero-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 56px; align-items: center; }
     .hero-grid > * { min-width: 0; }
-    .hero h1 { font-size: clamp(34px, 4.4vw, 54px); font-weight: 800; letter-spacing: -0.03em; }
+    .hero h1 { font-size: clamp(34px, 4.4vw, 54px); font-weight: 800; letter-spacing: -0.03em; line-height: 1.2; }
     .hero h1 .h1-sub { display: block; color: var(--ink-soft); font-weight: 700; }
     .hero-lead { margin-top: 24px; max-width: 540px; font-size: 17.5px; line-height: 1.6; color: var(--ink-soft); }
     .hero-ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
@@ -371,7 +373,7 @@
       color: #fff; text-align: center; padding: 110px 0;
     }
     .cta .eyebrow { color: #7fd3de; }
-    .cta h2 { font-size: clamp(32px, 4vw, 48px); font-weight: 800; }
+    .cta h2 { font-size: clamp(32px, 4vw, 48px); font-weight: 800; line-height: 1.25; }
     .cta h2 .cta-l2 { display: block; }
     .cta h2 .hl-change { color: #4cc3d3; }
     .cta p { margin: 18px auto 0; max-width: 560px; color: rgba(255,255,255,.72); }
@@ -480,7 +482,7 @@
     <section class="hero">
       <div class="wrap hero-grid">
         <div>
-          <h1>Making meaningful <span class="hl-change">changes<svg viewBox="0 0 200 16" preserveAspectRatio="none" aria-hidden="true"><path d="M2 12 C18 11 26 13 40 12 S62 11 76 12 C92 13 100 11 112 9 C124 6 132 4 150 4 S184 4 196 4"/><circle cx="196" cy="4" r="3.2"/></svg></span> in brain function visible <span class="h1-sub">across health and disease.</span></h1>
+          <h1>Making meaningful <span class="hl-change">changes<svg class="mark" viewBox="0 0 240 26" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="wm-hero" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#8be3c9"/><stop offset=".55" stop-color="#3cbfae"/><stop offset="1" stop-color="#1b8798"/></linearGradient></defs><g fill="none" stroke="url(#wm-hero)" stroke-linecap="round"><path d="M3 14 C30 2 60 2 86 11 S132 23 160 7" stroke-width="3.2"/><path d="M3 18 C30 7 62 7 88 15 S134 25 162 12" stroke-width="2.6"/><path d="M3 22 C30 12 64 12 92 19 S136 27 162 17" stroke-width="2"/></g><g fill="url(#wm-hero)"><circle cx="167" cy="7.5" r="2.3" style="--i:0"/><circle cx="176" cy="5" r="2.6" style="--i:1"/><circle cx="185" cy="3.2" r="2.8" style="--i:2"/><circle cx="194" cy="2.6" r="2.7" style="--i:3"/><circle cx="203" cy="3" r="2.5" style="--i:4"/><circle cx="212" cy="4.3" r="2.2" style="--i:5"/><circle cx="221" cy="6" r="1.9" style="--i:6"/><circle cx="230" cy="7.8" r="1.6" style="--i:7"/><circle cx="238" cy="9.6" r="1.3" style="--i:8"/><circle cx="169" cy="13" r="1.7" style="--i:9"/><circle cx="178" cy="11.8" r="1.9" style="--i:10"/><circle cx="187" cy="11.4" r="1.9" style="--i:11"/><circle cx="196" cy="11.8" r="1.8" style="--i:12"/><circle cx="205" cy="12.8" r="1.6" style="--i:13"/><circle cx="214" cy="14" r="1.4" style="--i:14"/><circle cx="223" cy="15.2" r="1.2" style="--i:15"/><circle cx="232" cy="16.4" r="1.0" style="--i:16"/></g></svg></span> in brain function visible <span class="h1-sub">across health and disease.</span></h1>
           <p class="hero-lead">Phenometric passively measures cognitive, motor and language function from everyday smartphone use, detecting meaningful change within each person to accelerate research, guide care and help develop better treatments.</p>
           <div class="hero-ctas">
             <a class="btn btn--primary" href="mailto:gadi.mikles@phenometric.com?subject=Partnering%20on%20a%20study">Partner on a study <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
@@ -808,7 +810,7 @@
     <section class="cta" id="contact">
       <div class="wrap">
         <div class="eyebrow">Our vision</div>
-        <h2>No meaningful <span class="hl-change">change<svg viewBox="0 0 200 16" preserveAspectRatio="none" aria-hidden="true"><path d="M2 12 C18 11 26 13 40 12 S62 11 76 12 C92 13 100 11 112 9 C124 6 132 4 150 4 S184 4 196 4"/><circle cx="196" cy="4" r="3.2"/></svg></span> <span class="cta-l2">should go unseen.</span></h2>
+        <h2>No meaningful <span class="hl-change">change<svg class="mark" viewBox="0 0 240 26" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="wm-cta" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#8be3c9"/><stop offset=".55" stop-color="#3cbfae"/><stop offset="1" stop-color="#1b8798"/></linearGradient></defs><g fill="none" stroke="url(#wm-cta)" stroke-linecap="round"><path d="M3 14 C30 2 60 2 86 11 S132 23 160 7" stroke-width="3.2"/><path d="M3 18 C30 7 62 7 88 15 S134 25 162 12" stroke-width="2.6"/><path d="M3 22 C30 12 64 12 92 19 S136 27 162 17" stroke-width="2"/></g><g fill="url(#wm-cta)"><circle cx="167" cy="7.5" r="2.3" style="--i:0"/><circle cx="176" cy="5" r="2.6" style="--i:1"/><circle cx="185" cy="3.2" r="2.8" style="--i:2"/><circle cx="194" cy="2.6" r="2.7" style="--i:3"/><circle cx="203" cy="3" r="2.5" style="--i:4"/><circle cx="212" cy="4.3" r="2.2" style="--i:5"/><circle cx="221" cy="6" r="1.9" style="--i:6"/><circle cx="230" cy="7.8" r="1.6" style="--i:7"/><circle cx="238" cy="9.6" r="1.3" style="--i:8"/><circle cx="169" cy="13" r="1.7" style="--i:9"/><circle cx="178" cy="11.8" r="1.9" style="--i:10"/><circle cx="187" cy="11.4" r="1.9" style="--i:11"/><circle cx="196" cy="11.8" r="1.8" style="--i:12"/><circle cx="205" cy="12.8" r="1.6" style="--i:13"/><circle cx="214" cy="14" r="1.4" style="--i:14"/><circle cx="223" cy="15.2" r="1.2" style="--i:15"/><circle cx="232" cy="16.4" r="1.0" style="--i:16"/></g></svg></span> <span class="cta-l2">should go unseen.</span></h2>
         <p>We're working with research partners, trial sponsors and health systems to make everyday brain function measurable. Let's talk about your study.</p>
         <div class="cta-row">
           <a class="btn btn--teal" href="mailto:gadi.mikles@phenometric.com?subject=Partnering%20with%20Phenometric">Partner with us <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
