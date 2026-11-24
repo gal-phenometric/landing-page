@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Phenometric</title>
-  <meta name="description" content="Phenometric detects changes in brain function in daily life through routine smartphone use, to advance research, guide care and develop better treatments." />
+  <title>Phenometric | Measuring change in everyday brain function</title>
+  <meta name="description" content="Phenometric passively measures cognitive, motor and language function from everyday smartphone use, detecting meaningful change within each person to accelerate research, guide care and help develop better treatments." />
   <meta name="robots" content="index, follow" />
 
   <!-- Open Graph / Social -->
@@ -12,12 +12,21 @@
   <meta property="og:description" content="Making meaningful changes in brain function visible across health and disease." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://phenometric.com" />
+  <meta property="og:site_name" content="Phenometric" />
+  <meta property="og:image" content="https://phenometric.com/assets/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Phenometric: making meaningful changes in brain function visible" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Phenometric" />
+  <meta name="twitter:description" content="Making meaningful changes in brain function visible across health and disease." />
+  <meta name="twitter:image" content="https://phenometric.com/assets/og-image.png" />
 
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='12' fill='%230B2545'/><path d='M16 40 L24 40 L28 22 L34 46 L40 32 L48 32' stroke='%23A8DADC' stroke-width='3.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=Inter:wght@400;500;600&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
 
   <style>
     :root {
@@ -34,10 +43,11 @@
       --navy-2: #08193a;
       --shadow: 0 1px 2px rgba(11,37,69,.04), 0 8px 24px rgba(11,37,69,.05);
       --radius: 16px;
+      --mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+    html { scroll-behavior: smooth; scroll-padding-top: 90px; }
     body {
       background: var(--bg);
       color: var(--ink);
@@ -64,13 +74,34 @@
     }
 
     .eyebrow {
+      display: inline-flex; align-items: center; gap: 10px;
       font-size: 11px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase;
-      color: var(--accent); margin-bottom: 14px;
+      color: var(--accent); margin-bottom: 16px;
     }
-    .h2 { font-size: clamp(28px, 3.4vw, 40px); font-weight: 700; max-width: 760px; }
+    .eyebrow .ix {
+      font-family: var(--mono); letter-spacing: .04em; color: var(--accent-dark);
+      padding: 2px 7px; border-radius: 6px; background: var(--bg-accent);
+    }
+    .center .eyebrow { justify-content: center; }
+    .h2 { font-size: clamp(28px, 3.4vw, 42px); font-weight: 800; letter-spacing: -0.025em; max-width: 780px; text-wrap: balance; }
     .center .h2 { margin: 0 auto; }
     .dot { color: var(--accent); }
-    .lead { margin-top: 18px; max-width: 700px; font-size: 16.5px; color: var(--ink-soft); }
+    strong.ink { color: var(--ink); font-weight: 600; }
+    .lead { margin-top: 18px; max-width: 700px; font-size: 17px; line-height: 1.6; color: var(--ink-soft); text-wrap: pretty; }
+    .center .lead { margin-left: auto; margin-right: auto; }
+
+    /* "change" emphasis: teal word with a signal line that steps up past baseline */
+    .hl-change { position: relative; color: var(--accent); white-space: nowrap; }
+    .hl-change svg { position: absolute; left: -2%; bottom: -.16em; width: 104%; height: .32em; overflow: visible; }
+    .hl-change path { fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; opacity: .55;
+      stroke-dasharray: 260; stroke-dashoffset: 260; animation: hl-draw 1.4s .4s cubic-bezier(.4,0,.2,1) forwards; }
+    .hl-change circle { fill: currentColor; opacity: 0; animation: hl-pop .3s 1.7s forwards; }
+    @keyframes hl-draw { to { stroke-dashoffset: 0; } }
+    @keyframes hl-pop { to { opacity: 1; } }
+
+    /* Scroll reveal (only when JS runs) */
+    .js .reveal { opacity: 0; transform: translateY(14px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1); }
+    .js .reveal.is-in { opacity: 1; transform: none; }
 
     /* ---------- Buttons ---------- */
     .btn {
@@ -104,23 +135,44 @@
       transition: border-color .2s;
     }
     .site-nav.is-scrolled { border-bottom-color: var(--line); }
-    .nav-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; height: 68px; }
-    .brand-logo { height: 34px; width: auto; }
-    .nav-links { display: flex; gap: 30px; font-size: 14px; color: var(--ink-soft); }
-    .nav-links a:hover { color: var(--ink); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; height: 78px; }
+    .brand-logo { height: 44px; width: auto; }
+    .nav-links { display: flex; gap: 32px; font-size: 14.5px; font-weight: 500; color: var(--ink-soft); }
+    .nav-links a { position: relative; padding: 6px 0; transition: color .2s; }
+    .nav-links a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; border-radius: 2px;
+      background: var(--accent); transform: scaleX(0); transition: transform .25s; }
+    .nav-links a:hover, .nav-links a.is-active { color: var(--ink); }
+    .nav-links a.is-active::after { transform: scaleX(1); }
 
     /* ---------- Hero ---------- */
     .hero {
+      position: relative; overflow: hidden;
       background:
-        radial-gradient(circle at 85% 30%, rgba(31,156,174,.10), transparent 45%),
+        radial-gradient(circle at 85% 30%, rgba(31,156,174,.12), transparent 45%),
         linear-gradient(180deg, #f1f6f9 0%, #ffffff 100%);
-      padding: 80px 0 72px;
+      padding: 84px 0 80px;
     }
+    .hero::before { /* faint measurement grid */
+      content: ""; position: absolute; inset: 0; pointer-events: none;
+      background-image: linear-gradient(rgba(11,37,69,.045) 1px, transparent 1px), linear-gradient(90deg, rgba(11,37,69,.045) 1px, transparent 1px);
+      background-size: 32px 32px;
+      -webkit-mask-image: radial-gradient(ellipse at 70% 40%, #000 0%, transparent 70%);
+              mask-image: radial-gradient(ellipse at 70% 40%, #000 0%, transparent 70%);
+    }
+    .hero .wrap { position: relative; }
+    .hero-pill {
+      display: inline-flex; align-items: center; gap: 10px; margin-bottom: 22px;
+      padding: 6px 14px 6px 10px; border-radius: 999px; background: #fff; border: 1px solid var(--line);
+      box-shadow: 0 1px 2px rgba(11,37,69,.04); font-size: 12.5px; font-weight: 600; color: var(--ink-soft);
+    }
+    .pulse { position: relative; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+    .pulse::after { content: ""; position: absolute; inset: -4px; border-radius: 50%; border: 2px solid var(--accent); opacity: 0; animation: pulse 2.2s ease-out infinite; }
+    @keyframes pulse { 0% { transform: scale(.5); opacity: .7; } 100% { transform: scale(1.6); opacity: 0; } }
     .hero-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 56px; align-items: center; }
     .hero-grid > * { min-width: 0; }
     .hero h1 { font-size: clamp(34px, 4.4vw, 54px); font-weight: 800; letter-spacing: -0.03em; }
-    .hero h1 .teal { color: var(--accent); display: block; }
-    .hero-lead { margin-top: 22px; max-width: 520px; font-size: 17px; color: var(--ink-soft); }
+    .hero h1 .h1-sub { display: block; color: var(--ink-soft); font-weight: 700; }
+    .hero-lead { margin-top: 24px; max-width: 540px; font-size: 17.5px; line-height: 1.6; color: var(--ink-soft); }
     .hero-ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
     .trust-row { display: flex; flex-wrap: wrap; gap: 10px 26px; margin-top: 30px; font-size: 12.5px; color: var(--ink-soft); }
     .trust-row li { display: inline-flex; align-items: center; gap: 7px; }
@@ -161,6 +213,7 @@
     .hc-svg .det-lbl { font: 600 9.5px 'Inter', sans-serif; }
     @keyframes hc-draw { to { stroke-dashoffset: 0; } }
     .chart-foot { margin-top: 8px; text-align: right; font-size: 11px; color: var(--muted); }
+    .fig { font-family: var(--mono); font-size: 10.5px; color: var(--accent-dark); margin-right: 6px; }
     .svg-label { font: 500 10px 'Inter', sans-serif; fill: var(--muted); }
 
     /* ---------- Cards (shared) ---------- */
@@ -257,12 +310,21 @@
     .paper-meta .src { color: var(--muted); }
     .paper h3 { font-family: 'Inter', sans-serif; letter-spacing: 0; font-size: 15px; font-weight: 600; line-height: 1.4; margin-top: 12px; }
     .paper p { margin-top: 8px; font-size: 13.5px; color: var(--ink-soft); }
-    .paper-foot { display: flex; align-items: center; gap: 10px; margin-top: 12px; font-size: 13px; color: var(--muted); }
+    .paper-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin-top: 14px; font-size: 13px; color: var(--muted); }
+    .paper-foot .doi { font-family: var(--mono); font-size: 11.5px; }
+    .paper-foot .text-link { margin-left: auto; }
+    .fig-k { margin-bottom: 6px; }
     .disclaimer { margin-top: 28px; text-align: center; font-size: 12.5px; color: var(--muted); }
 
     /* ---------- Team ---------- */
-    .core { display: grid; grid-template-columns: repeat(5, 1fr); gap: 24px; margin-top: 52px; }
-    .person { text-align: center; }
+    .core { display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; margin-top: 52px; }
+    .person {
+      text-align: center; padding: 30px 18px 26px; border-radius: var(--radius);
+      background: #fff; border: 1px solid var(--line); box-shadow: var(--shadow);
+      transition: transform .25s, box-shadow .25s;
+    }
+    .person:hover { transform: translateY(-3px); box-shadow: 0 1px 2px rgba(11,37,69,.04), 0 16px 36px rgba(11,37,69,.09); }
+    .person strong { color: var(--ink); font-weight: 600; }
     .avatar {
       width: 112px; height: 112px; border-radius: 50%; margin: 0 auto; overflow: hidden;
       background: var(--bg-accent); display: grid; place-items: center;
@@ -280,9 +342,9 @@
       display: inline-block; margin-top: 10px; padding: 3px 10px; border-radius: 999px;
       border: 1px dashed rgba(31,156,174,.45); font-size: 11px; color: var(--accent-dark);
     }
-    .person h3 { font-size: 15px; font-weight: 700; margin-top: 18px; }
+    .person h3 { font-size: 16px; font-weight: 700; margin-top: 20px; }
     .person .role { margin-top: 4px; font-size: 10.5px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); }
-    .person p { margin-top: 8px; font-size: 13px; color: var(--ink-soft); }
+    .person p { margin-top: 12px; font-size: 13.5px; line-height: 1.55; color: var(--ink-soft); }
 
     .network { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 48px; }
     .network .card { padding: 24px 26px; }
@@ -310,13 +372,14 @@
     }
     .cta .eyebrow { color: #7fd3de; }
     .cta h2 { font-size: clamp(32px, 4vw, 48px); font-weight: 800; }
-    .cta h2 span { color: #4cc3d3; display: block; }
+    .cta h2 .cta-l2 { display: block; }
+    .cta h2 .hl-change { color: #4cc3d3; }
     .cta p { margin: 18px auto 0; max-width: 560px; color: rgba(255,255,255,.72); }
     .cta-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 32px; }
 
     .site-footer { background: var(--navy-2); color: rgba(255,255,255,.62); padding: 64px 0 28px; font-size: 13.5px; }
     .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 32px; }
-    .footer-logo { height: 30px; width: auto; filter: brightness(0) invert(1); }
+    .footer-logo { height: 38px; width: auto; filter: brightness(0) invert(1); }
     .footer-grid > div:first-child p { margin-top: 16px; max-width: 280px; }
     .footer-grid h4 { font-family: 'Inter', sans-serif; letter-spacing: 0; font-size: 13.5px; font-weight: 600; color: #fff; margin-bottom: 14px; }
     .footer-grid li + li { margin-top: 10px; }
@@ -335,7 +398,7 @@
       .steps { grid-template-columns: repeat(2, 1fr); }
       .step:nth-child(3) { border-left: 0; }
       .step:nth-child(n+3) { border-top: 1px solid rgba(255,255,255,.08); }
-      .core { grid-template-columns: repeat(3, 1fr); row-gap: 40px; }
+      .core { grid-template-columns: repeat(3, 1fr); }
       .footer-grid { grid-template-columns: 1fr 1fr; }
     }
     @media (max-width: 720px) {
@@ -345,11 +408,18 @@
       .gap-grid, .solutions, .papers { grid-template-columns: 1fr; }
       .steps { grid-template-columns: 1fr; }
       .step + .step { border-left: 0; border-top: 1px solid rgba(255,255,255,.08); }
-      .core { grid-template-columns: repeat(2, 1fr); }
       .partner-band { flex-direction: column; align-items: flex-start; padding: 28px; gap: 20px; }
       .partner-band .copy { padding-left: 0; border-left: 0; }
-      .brand-logo { height: 26px; }
-      .nav-inner .btn { padding: 8px 14px; font-size: 13px; }
+      .brand-logo { height: 28px; }
+      .nav-inner { height: 64px; gap: 12px; }
+      .nav-inner .btn { padding: 8px 13px; font-size: 12.5px; }
+      .core { grid-template-columns: 1fr; gap: 12px; }
+      .person { display: grid; grid-template-columns: 72px 1fr; column-gap: 16px; align-items: center; text-align: left; padding: 18px; }
+      .person .avatar { grid-row: span 4; width: 72px; height: 72px; margin: 0; font-size: 20px; }
+      .person .avatar--anon svg { width: 38px; height: 38px; }
+      .person h3 { margin-top: 0; }
+      .person p { margin-top: 6px; }
+      .person .tba { justify-self: start; margin-top: 8px; }
       .chart-card-head { flex-direction: column; }
       .chart-card { padding: 18px 16px 14px; }
     }
@@ -395,7 +465,6 @@
     <div class="wrap nav-inner">
       <a href="#top" aria-label="Phenometric home"><img class="brand-logo" src="assets/logo-dark.png" alt="Phenometric" /></a>
       <nav class="nav-links" aria-label="Primary">
-        <a href="#how">How it works</a>
         <a href="#solutions">Solutions</a>
         <a href="#research">Research</a>
         <a href="#science">Science</a>
@@ -411,8 +480,8 @@
     <section class="hero">
       <div class="wrap hero-grid">
         <div>
-          <h1>Making meaningful changes in brain function visible <span class="teal">across health and disease.</span></h1>
-          <p class="hero-lead">Detecting changes in brain function in daily life through routine smartphone use to advance research, guide care and develop better treatments.</p>
+          <h1>Making meaningful <span class="hl-change">changes<svg viewBox="0 0 200 16" preserveAspectRatio="none" aria-hidden="true"><path d="M2 12 C18 11 26 13 40 12 S62 11 76 12 C92 13 100 11 112 9 C124 6 132 4 150 4 S184 4 196 4"/><circle cx="196" cy="4" r="3.2"/></svg></span> in brain function visible <span class="h1-sub">across health and disease.</span></h1>
+          <p class="hero-lead">Phenometric passively measures cognitive, motor and language function from everyday smartphone use, detecting meaningful change within each person to accelerate research, guide care and help develop better treatments.</p>
           <div class="hero-ctas">
             <a class="btn btn--primary" href="mailto:gadi.mikles@phenometric.com?subject=Partnering%20on%20a%20study">Partner on a study <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
             <a class="btn btn--ghost" href="#science">View the science</a>
@@ -428,10 +497,10 @@
         <figure class="chart-card" id="hero-chart" aria-labelledby="hc-title hc-desc">
           <div class="chart-card-head">
             <div>
-              <div class="chart-kicker">Participant P-014 · 12 weeks · passive</div>
+              <div class="chart-kicker">Participant P-014, 12 weeks</div>
               <div class="chart-title" id="hc-title">Daily brain function vs. personal baseline</div>
             </div>
-            <span class="badge-detect" id="hc-badge">Change detected · 3 domains</span>
+            <span class="badge-detect" id="hc-badge">Change detected in 3 domains</span>
           </div>
           <p class="visually-hidden" id="hc-desc">After treatment starts in week 4, fine motor speed, alertness and language quality each rise above the participant's personal baseline band, at different times.</p>
 
@@ -451,20 +520,20 @@
     <section class="section section--soft">
       <div class="wrap">
         <div class="center">
-          <div class="eyebrow">Already moving</div>
+          <div class="eyebrow">Why Phenometric</div>
           <h2 class="h2">From functional signals to evidence<span class="dot">.</span></h2>
         </div>
-        <p class="lead" style="margin-left:auto;margin-right:auto;text-align:center">A clinically anchored platform, built with leading hospitals and designed to measure change within each individual, across conditions and over time.</p>
+        <p class="lead" style="margin-left:auto;margin-right:auto;text-align:center">Developed with leading hospitals to measure <strong class="ink">change within each individual</strong>, across conditions and over time.</p>
         <div class="stats">
           <article class="card stat">
             <div class="stat-top"><div class="icon-badge"><svg aria-hidden="true"><use href="#i-building"/></svg></div><span class="stat-k">Clinical partnerships</span></div>
             <h3>Built with leading hospitals</h3>
-            <p>Active research collaborations with top-tier academic medical centers, from protocol design through clinical validation against established reference measures.</p>
+            <p>We run research collaborations with leading academic medical centers, from protocol design to clinical validation against established measures.</p>
           </article>
           <article class="card stat">
             <div class="stat-top"><div class="icon-badge"><svg aria-hidden="true"><use href="#i-flask"/></svg></div><span class="stat-k">Cross-indication</span></div>
             <h3>One platform, many conditions</h3>
-            <p>A single passive measurement layer across neurological and psychiatric populations.</p>
+            <p>The same passive measurement works across neurological and psychiatric conditions.</p>
             <ul class="chips" aria-label="Conditions">
               <li>Parkinson's disease</li><li>Multiple sclerosis</li><li>MCI</li><li>Mental health</li>
             </ul>
@@ -472,22 +541,22 @@
           <article class="card stat">
             <div class="stat-top"><div class="icon-badge"><svg aria-hidden="true"><use href="#i-users"/></svg></div><span class="stat-k">Personalized modeling</span></div>
             <h3>Every person is their own baseline</h3>
-            <p>Proprietary, patent-pending within-person models learn each individual's normal, including daily rhythms and natural variability, so change is measured against the person, not a population average.</p>
+            <p>Our patent-pending models learn what is normal for each person, including their daily rhythms and natural ups and downs. Change is then measured against that person rather than a population average.</p>
           </article>
           <article class="card stat">
             <div class="stat-top"><div class="icon-badge"><svg aria-hidden="true"><use href="#i-wave"/></svg></div><span class="stat-k">Longitudinal insight</span></div>
             <h3>Treatment response over time</h3>
-            <p>Continuous tracking of onset, magnitude and durability of response between clinic visits, surfacing improvement, decline and fluctuation as they happen.</p>
+            <p>Shows when a response to treatment starts, how large it is and whether it lasts, using the weeks between clinic visits rather than a few snapshots.</p>
           </article>
           <article class="card stat">
-            <div class="stat-top"><div class="icon-badge"><svg aria-hidden="true"><use href="#i-filter"/></svg></div><span class="stat-k">Signal over noise</span></div>
-            <h3>Proprietary noise filtering</h3>
-            <p>Dedicated signal-processing pipelines separate true functional change from everyday noise, such as context, device, time of day, mood and situational variability, keeping false alerts low.</p>
+            <div class="stat-top"><div class="icon-badge"><svg aria-hidden="true"><use href="#i-filter"/></svg></div><span class="stat-k">Noise filtering</span></div>
+            <h3>Real change, not daily noise</h3>
+            <p>Our signal-processing pipelines account for context, device, time of day and mood, so a bad night or a busy day is not mistaken for a real change. The result is fewer false alerts.</p>
           </article>
           <article class="card stat">
-            <div class="stat-top"><div class="icon-badge"><svg aria-hidden="true"><use href="#i-phone"/></svg></div><span class="stat-k">Zero burden · private</span></div>
+            <div class="stat-top"><div class="icon-badge"><svg aria-hidden="true"><use href="#i-phone"/></svg></div><span class="stat-k">Zero burden</span></div>
             <h3>Fully passive on iOS &amp; Android</h3>
-            <p>Captures real-world function from everyday phone use. No active tests, no wearables, no change in behavior, and on-device processing so raw typed content never leaves the phone.</p>
+            <p>Runs in the background on the phone people already use, with no tests to take and nothing to wear. Processing happens on the device, so what people type never leaves their phone.</p>
           </article>
         </div>
 
@@ -497,23 +566,23 @@
         </div>
         <div class="programs">
           <article class="card program">
-            <div class="site">Neurology · Clinical validation</div>
+            <div class="site">Neurology</div>
             <h3>Multiple sclerosis</h3>
             <div class="focus">Stable vs. meaningful change</div>
             <p>Processing speed, fine motor dexterity and linguistic features, compared with SDMT, 9HPT and MoCA. Studying natural variability, false alerts and sensitivity to within-person change.</p>
             <span class="tag tag--plain">Protocol and validation development</span>
           </article>
           <article class="card program">
-            <div class="site">Movement disorders · Clinical study</div>
+            <div class="site">Movement disorders</div>
             <h3>Parkinson's disease</h3>
             <div class="focus">Treatment-linked fluctuation</div>
             <p>Typing and phone-motion patterns alongside clinical ratings, levodopa timing and ON/OFF observations (MDS-UPDRS).</p>
             <span class="tag tag--plain">Planned clinical study</span>
           </article>
           <article class="card program">
-            <div class="site">Longevity · Research</div>
+            <div class="site">Longevity</div>
             <h3>Healthy aging</h3>
-            <div class="focus">Cognition · sleep · women's health</div>
+            <div class="focus">Cognition, sleep and women's health</div>
             <p>Cognition, fatigue, sleep and menopause-related content, with a focus on everyday function and intervention response.</p>
             <span class="tag tag--plain">Exploratory research concept</span>
           </article>
@@ -534,8 +603,8 @@
     <section class="section">
       <div class="wrap">
         <div class="eyebrow">The measurement gap</div>
-        <h2 class="h2">Clinic visits are snapshots. Function is continuous<span class="dot">.</span></h2>
-        <p class="lead">Sparse assessments can miss early decline, treatment response, daily fluctuation, fatigue and recovery - the dynamics that matter in MS, Parkinson's, dementia, epilepsy and migraine.</p>
+        <h2 class="h2">Clinic visits are snapshots. Brain function is continuous<span class="dot">.</span></h2>
+        <p class="lead">Periodic assessments miss what happens in between, such as early decline, a response to treatment, daily fluctuation, fatigue and recovery. In MS, Parkinson's, dementia, epilepsy and migraine, this is often what matters most.</p>
 
         <div class="gap-grid">
           <figure class="card gap-card">
@@ -573,51 +642,12 @@
       </div>
     </section>
 
-    <!-- ============ How it works ============ -->
-    <section class="section section--soft" id="how">
-      <div class="wrap">
-        <div class="eyebrow">How it works</div>
-        <h2 class="h2">From everyday smartphone use to functional insight<span class="dot">.</span></h2>
-        <p class="lead">A low-burden measurement layer built around ordinary behavior, not repeated active tests. The smartphone already in a person's hands becomes a continuous window into cognitive, motor and linguistic function.</p>
-
-        <!-- HIDDEN for now: remove "hidden" from .signals, .steps and .privacy-note to restore. -->
-        <div class="signals" hidden>
-          <div class="card signal">
-            <div class="num">01</div>
-            <h3>Typing &amp; touch</h3>
-            <p>Timing, speed, corrections, touch precision and within-session variability.</p>
-            <span class="tag">Motor control · cognitive tempo</span>
-          </div>
-          <div class="card signal">
-            <div class="num">02</div>
-            <h3>Phone motion</h3>
-            <p>Accelerometer and gyroscope patterns captured while the phone is in use.</p>
-            <span class="tag">Movement variability · tremor patterns</span>
-          </div>
-          <div class="card signal">
-            <div class="num">03</div>
-            <h3>Language</h3>
-            <p>On-device, derived language patterns such as word choice, repetition and grammar.</p>
-            <span class="tag">Cognitive-linguistic expression</span>
-          </div>
-        </div>
-
-        <ol class="steps" hidden>
-          <li class="step"><div class="k">Step 1</div><h3>Learn normal</h3><p>A personal baseline, including each person's time-of-day and across-day variability.</p></li>
-          <li class="step"><div class="k">Step 2</div><h3>Model context</h3><p>Separate meaningful signal from ordinary daily noise and context.</p></li>
-          <li class="step"><div class="k">Step 3</div><h3>Identify a departure</h3><p>Flag sustained change relative to the individual's usual envelope.</p></li>
-          <li class="step"><div class="k">Step 4</div><h3>Verify clinically</h3><p>Compare against independent clinical measures, repeatability and false alert rate.</p></li>
-        </ol>
-        <p class="privacy-note" hidden><svg aria-hidden="true"><use href="#i-lock"/></svg>Privacy by design: no raw typed text leaves the device.</p>
-      </div>
-    </section>
-
     <!-- ============ Solutions ============ -->
-    <section class="section" id="solutions">
+    <section class="section section--soft" id="solutions">
       <div class="wrap">
         <div class="eyebrow">Solutions</div>
         <h2 class="h2">One measurement platform across brain health<span class="dot">.</span></h2>
-        <p class="lead">Neurology, mental health and healthy aging share one need: seeing how real-world function changes over time, and why.</p>
+        <p class="lead">Neurology, mental health and healthy aging have a common need: to understand how everyday function changes over time, and why.</p>
 
         <div class="solutions">
           <article class="card solution">
@@ -669,36 +699,36 @@
     </section>
 
     <!-- ============ Science ============ -->
-    <section class="section section--soft" id="science">
+    <section class="section" id="science">
       <div class="wrap">
         <div class="eyebrow">Scientific rationale</div>
-        <h2 class="h2">Peer-reviewed research supports the modality<span class="dot">.</span></h2>
-        <p class="lead">Independent studies establish feasibility and associations for smartphone typing as a window into brain function. Our focus is the next frontier: reliable change within each individual.</p>
+        <h2 class="h2">Built on peer-reviewed science<span class="dot">.</span></h2>
+        <p class="lead">Independent studies link everyday typing to motor, cognitive and treatment-related outcomes. We build on that work, with a focus on detecting reliable change in each individual.</p>
 
         <div class="papers">
           <article class="card paper">
-            <div class="paper-meta"><span class="area">Multiple sclerosis</span><span class="src">JMIR · 2022</span></div>
+            <div class="paper-meta"><span class="area">Multiple sclerosis</span><span class="src">JMIR, 2022</span></div>
             <h3>The use of smartphone keystroke dynamics to passively monitor upper limb and cognitive function in multiple sclerosis</h3>
             <p>102 people with MS followed for one year: everyday typing on their own phones tracked upper-limb function and processing speed (9HPT, SDMT).</p>
-            <div class="paper-foot">Lam et al. · <a class="text-link" href="https://doi.org/10.2196/37614" target="_blank" rel="noopener">Read paper <svg aria-hidden="true"><use href="#i-ext"/></svg></a></div>
+            <div class="paper-foot">Lam et al. <span class="doi">doi:10.2196/37614</span><a class="text-link" href="https://doi.org/10.2196/37614" target="_blank" rel="noopener">Read paper <svg aria-hidden="true"><use href="#i-ext"/></svg></a></div>
           </article>
           <article class="card paper">
-            <div class="paper-meta"><span class="area">Parkinson's</span><span class="src">Movement Disorders · 2019</span></div>
+            <div class="paper-meta"><span class="area">Parkinson's</span><span class="src">Movement Disorders, 2019</span></div>
             <h3>Remote monitoring of treatment response in Parkinson's disease: the habit of typing on a computer</h3>
             <p>Unsupervised at-home typing was explored as a remote marker of response to dopaminergic treatment in early Parkinson's disease.</p>
-            <div class="paper-foot">Matarazzo et al. · <a class="text-link" href="https://doi.org/10.1002/mds.27772" target="_blank" rel="noopener">Read paper <svg aria-hidden="true"><use href="#i-ext"/></svg></a></div>
+            <div class="paper-foot">Matarazzo et al. <span class="doi">doi:10.1002/mds.27772</span><a class="text-link" href="https://doi.org/10.1002/mds.27772" target="_blank" rel="noopener">Read paper <svg aria-hidden="true"><use href="#i-ext"/></svg></a></div>
           </article>
           <article class="card paper">
-            <div class="paper-meta"><span class="area">Cognition</span><span class="src">Cognitive Computation · 2026</span></div>
+            <div class="paper-meta"><span class="area">Cognition</span><span class="src">Cognitive Computation, 2026</span></div>
             <h3>Keying into cognition: smartphone typing behaviors for passive assessment of processing speed and executive function</h3>
             <p>In people with mood disorders, passive smartphone typing behavior alone was used to estimate processing speed and executive function.</p>
-            <div class="paper-foot">Ross et al. · <a class="text-link" href="https://doi.org/10.1007/s12559-026-10549-y" target="_blank" rel="noopener">Read paper <svg aria-hidden="true"><use href="#i-ext"/></svg></a></div>
+            <div class="paper-foot">Ross et al. <span class="doi">doi:10.1007/s12559-026-10549-y</span><a class="text-link" href="https://doi.org/10.1007/s12559-026-10549-y" target="_blank" rel="noopener">Read paper <svg aria-hidden="true"><use href="#i-ext"/></svg></a></div>
           </article>
           <article class="card paper">
-            <div class="paper-meta"><span class="area">Review</span><span class="src">Brain Sciences · 2023</span></div>
+            <div class="paper-meta"><span class="area">Review</span><span class="src">Brain Sciences, 2023</span></div>
             <h3>A review on smartphone keystroke dynamics as a digital biomarker for understanding neurocognitive functioning</h3>
             <p>A review of keystroke dynamics for neurocognitive research, including methodological and ethical considerations.</p>
-            <div class="paper-foot">Nguyen et al. · <a class="text-link" href="https://doi.org/10.3390/brainsci13060959" target="_blank" rel="noopener">Read paper <svg aria-hidden="true"><use href="#i-ext"/></svg></a></div>
+            <div class="paper-foot">Nguyen et al. <span class="doi">doi:10.3390/brainsci13060959</span><a class="text-link" href="https://doi.org/10.3390/brainsci13060959" target="_blank" rel="noopener">Read paper <svg aria-hidden="true"><use href="#i-ext"/></svg></a></div>
           </article>
         </div>
         <p class="disclaimer">Independent literature cited for context. Phenometric is research-stage technology and is not intended to diagnose or treat any condition.</p>
@@ -706,34 +736,34 @@
     </section>
 
     <!-- ============ Team ============ -->
-    <section class="section" id="team">
+    <section class="section section--soft" id="team">
       <div class="wrap">
         <div class="center">
           <div class="eyebrow">The team</div>
           <h2 class="h2">The people behind Phenometric<span class="dot">.</span></h2>
-          <p class="lead" style="margin-left:auto;margin-right:auto">Product, signal engineering and AI, supported by clinical and scientific experts.</p>
+          <p class="lead">Product, signal engineering and AI experience, working closely with clinicians and neuroscientists.</p>
         </div>
 
         <div class="core">
           <div class="person">
             <div class="avatar" data-initials="GM"><img src="assets/team/gadi-mikles-256.jpg" alt="" width="112" height="112" loading="lazy" onerror="avatarFallback(this)" /></div>
             <h3>Gadi Mikles</h3><div class="role">Co-Founder &amp; CEO</div>
-            <p>Product, AI and digital health; 20+ years of leadership</p>
+            <p>Product, AI and digital health leader with <strong>20+ years</strong> building and scaling products.</p>
           </div>
           <div class="person">
             <div class="avatar" data-initials="GR"><img src="assets/team/gal-rom-256.jpg" alt="" width="112" height="112" loading="lazy" onerror="avatarFallback(this)" /></div>
             <h3>Gal Rom</h3><div class="role">Co-Founder &amp; CTO</div>
-            <p>R&amp;D, signal engineering and regulated SaMD</p>
+            <p><strong>13+ years</strong> in R&amp;D and signal engineering; leads the platform and <strong>regulated medical software</strong> development.</p>
           </div>
           <div class="person">
             <div class="avatar" data-initials="MM"><img src="assets/team/matan-mizrachi-256.jpg" alt="" width="112" height="112" loading="lazy" onerror="avatarFallback(this)" /></div>
             <h3>Matan Mizrachi</h3><div class="role">R&amp;D Lead</div>
-            <p>Signal processing and longitudinal analytics</p>
+            <p>Leads <strong>signal processing and analytics</strong> for longitudinal functional measures.</p>
           </div>
           <div class="person">
             <div class="avatar" data-initials="AW"><img src="assets/team/adi-wilf-yarkoni-256.jpg" alt="" width="112" height="112" loading="lazy" onerror="avatarFallback(this)" /></div>
             <h3>Dr. Adi Wilf-Yarkoni</h3><div class="role">Medical Lead</div>
-            <p>MS neurology and clinical validation</p>
+            <p><strong>Neurologist</strong> focused on <strong>MS</strong>, clinical workflows and meaningful validation measures.</p>
           </div>
           <div class="person">
             <!-- Name withheld for now: replace this avatar/heading with the real ones once it can be published. -->
@@ -747,7 +777,7 @@
               </svg>
             </div>
             <h3>Senior Neuroscientist</h3><div class="role">Neuroscience Lead</div>
-            <p>Cognitive and motor research; study design</p>
+            <p>Neuroscientist focused on <strong>cognition, motor function</strong> and study rigor.</p>
             <span class="tba">Name to be announced</span>
           </div>
         </div>
@@ -778,7 +808,7 @@
     <section class="cta" id="contact">
       <div class="wrap">
         <div class="eyebrow">Our vision</div>
-        <h2>No meaningful change <span>should go unseen.</span></h2>
+        <h2>No meaningful <span class="hl-change">change<svg viewBox="0 0 200 16" preserveAspectRatio="none" aria-hidden="true"><path d="M2 12 C18 11 26 13 40 12 S62 11 76 12 C92 13 100 11 112 9 C124 6 132 4 150 4 S184 4 196 4"/><circle cx="196" cy="4" r="3.2"/></svg></span> <span class="cta-l2">should go unseen.</span></h2>
         <p>We're working with research partners, trial sponsors and health systems to make everyday brain function measurable. Let's talk about your study.</p>
         <div class="cta-row">
           <a class="btn btn--teal" href="mailto:gadi.mikles@phenometric.com?subject=Partnering%20with%20Phenometric">Partner with us <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
@@ -797,7 +827,7 @@
         </div>
         <div>
           <h4>Platform</h4>
-          <ul><li><a href="#how">How it works</a></li><li><a href="#research">Research programs</a></li><li><a href="#science">Science</a></li><li><a href="#team">Team</a></li></ul>
+          <ul><li><a href="#research">Research programs</a></li><li><a href="#science">Science</a></li><li><a href="#team">Team</a></li></ul>
         </div>
         <div>
           <h4>Solutions</h4>
@@ -810,7 +840,7 @@
       </div>
       <div class="footer-bottom">
         <span>&copy; <span id="year">2026</span> Phenometric. All rights reserved.</span>
-        <span>Research-stage technology · Patent pending</span>
+        <span>Research-stage technology. Patent pending.</span>
       </div>
     </div>
   </footer>
@@ -866,7 +896,7 @@
 
       // A dip worth annotating: one bad night shows as a short alertness drop that is NOT flagged
       var dipI = DATA.alert.v.indexOf(Math.min.apply(null, DATA.alert.v));
-      el('text', { x: x(dipI), y: y(DATA.alert.v[dipI]) + 14, class: 'svg-label', 'text-anchor': 'middle' }).textContent = 'Poor-sleep day · filtered';
+      el('text', { x: x(dipI), y: y(DATA.alert.v[dipI]) + 14, class: 'svg-label', 'text-anchor': 'middle' }).textContent = 'Poor-sleep day (filtered)';
 
       var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
       var keys = Object.keys(DATA), delay = 0;
@@ -912,6 +942,44 @@
         b.addEventListener('mouseleave', function () { if (!locked) focus(null); });
         b.addEventListener('click', function () { locked = locked === k ? null : k; focus(locked); });
       });
+    })();
+
+    // Scroll reveal
+    (function () {
+      var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduce || !('IntersectionObserver' in window)) return;
+      document.documentElement.classList.add('js');
+      var items = document.querySelectorAll('.section .eyebrow, .section .h2, .section .lead, .card, .person, .gap-question, .programs-head, .partner-band');
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          var t = e.target; t.classList.add('is-in'); io.unobserve(t);
+          // hand control back to the element's own hover transitions once revealed
+          setTimeout(function () { t.classList.remove('reveal', 'is-in'); t.style.transitionDelay = ''; }, 1100);
+        });
+      }, { rootMargin: '0px 0px -8% 0px' });
+      items.forEach(function (el) {
+        if (el.closest('.hero') || el.closest('[hidden]')) return;
+        var sib = el.parentNode ? Array.prototype.indexOf.call(el.parentNode.children, el) : 0;
+        el.style.transitionDelay = Math.min(sib, 5) * 60 + 'ms';
+        el.classList.add('reveal'); io.observe(el);
+      });
+    })();
+
+    // Highlight the nav link for the section in view
+    (function () {
+      var links = Array.prototype.slice.call(document.querySelectorAll('.nav-links a'));
+      var map = links.map(function (a) { return [a, document.querySelector(a.getAttribute('href'))]; }).filter(function (p) { return p[1]; });
+      function spy() {
+        var y = window.scrollY + 120, cur = null, best = -Infinity;
+        map.forEach(function (p) {
+          var top = p[1].getBoundingClientRect().top + window.scrollY;
+          if (top <= y && top > best) { best = top; cur = p[0]; }
+        });
+        if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) cur = links[links.length - 1];
+        links.forEach(function (a) { a.classList.toggle('is-active', a === cur); });
+      }
+      window.addEventListener('scroll', spy, { passive: true }); spy();
     })();
 
     // Sticky nav border once the page scrolls
