@@ -145,6 +145,12 @@
       background: var(--accent); transform: scaleX(0); transition: transform .25s; }
     .nav-links a:hover, .nav-links a.is-active { color: var(--ink); }
     .nav-links a.is-active::after { transform: scaleX(1); }
+    .nav-toggle { display: none; width: 40px; height: 40px; border: 1px solid var(--line); border-radius: 10px; background: #fff; cursor: pointer; flex-shrink: 0;
+      flex-direction: column; align-items: center; justify-content: center; gap: 4px; }
+    .nav-toggle span { display: block; width: 16px; height: 2px; border-radius: 2px; background: var(--ink); transition: transform .2s, opacity .2s; }
+    .nav-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+    .nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 
     /* ---------- Hero ---------- */
     .hero {
@@ -386,6 +392,8 @@
     .footer-grid > div:first-child p { margin-top: 16px; max-width: 280px; }
     .footer-grid h4 { font-family: 'Inter', sans-serif; letter-spacing: 0; font-size: 13.5px; font-weight: 600; color: #fff; margin-bottom: 14px; }
     .footer-grid li + li { margin-top: 10px; }
+    .footer-grid > div { min-width: 0; }
+    .footer-grid a { overflow-wrap: anywhere; }
     .footer-grid a:hover { color: #fff; }
     .footer-bottom {
       display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px;
@@ -395,6 +403,16 @@
     /* ---------- Responsive ---------- */
     @media (max-width: 1000px) {
       .nav-links { display: none; }
+      .nav-toggle { display: inline-flex; }
+      .nav-inner > .btn { margin-left: auto; }
+      .nav-links.is-open {
+        display: flex; flex-direction: column; gap: 0; position: absolute; top: 100%; left: 0; right: 0;
+        padding: 6px 32px 14px; background: #fff; border-bottom: 1px solid var(--line); box-shadow: 0 16px 32px rgba(11,37,69,.08);
+        font-size: 16px;
+      }
+      .nav-links.is-open a { padding: 12px 0; border-bottom: 1px solid var(--line); }
+      .nav-links.is-open a:last-child { border-bottom: 0; }
+      .nav-links.is-open a::after { display: none; }
       .hero-grid { grid-template-columns: 1fr; }
       .stats { grid-template-columns: repeat(2, 1fr); }
       .signals, .programs { grid-template-columns: 1fr; }
@@ -416,6 +434,7 @@
       .brand-logo { height: 31px; }
       .nav-inner { height: 68px; gap: 12px; }
       .nav-inner .btn { padding: 8px 13px; font-size: 12.5px; }
+      .nav-links.is-open { padding: 6px 16px 14px; }
       .core { grid-template-columns: 1fr; gap: 12px; }
       .person { display: grid; grid-template-columns: 72px 1fr; column-gap: 16px; align-items: center; text-align: left; padding: 18px; }
       .person .avatar { grid-row: span 4; width: 72px; height: 72px; margin: 0; font-size: 20px; }
@@ -428,12 +447,42 @@
     }
     @media (max-width: 460px) {
       .stats { grid-template-columns: 1fr; }
+      .nav-inner > .btn { display: none; }
+      .nav-toggle { margin-left: auto; }
       .footer-grid { grid-template-columns: 1fr; }
     }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       *, *::before, *::after { transition: none !important; animation: none !important; }
     }
+
+    /* ---------- Navy sections (blend the footer navy through the page) ---------- */
+    .section--navy { background: radial-gradient(ellipse at 85% 0%, rgba(31,156,174,.22), transparent 55%), var(--navy); color: #fff; }
+    .section--navy .eyebrow { color: #7fd3de; }
+    .section--navy .eyebrow .ix { background: rgba(127,211,222,.12); color: #7fd3de; }
+    .section--navy .h2 { color: #fff; }
+    .section--navy .dot { color: #4cc3d3; }
+    .section--navy .lead { color: rgba(255,255,255,.72); }
+    .section--navy .card { background: rgba(255,255,255,.045); border-color: rgba(255,255,255,.10); box-shadow: none; }
+    .section--navy .gap-card h3, .section--navy .paper h3 { color: #fff; }
+    .section--navy .gap-card .sub, .section--navy .paper-meta .src, .section--navy .paper-foot, .section--navy .disclaimer { color: rgba(255,255,255,.5); }
+    .section--navy .gap-card line { stroke: rgba(255,255,255,.14); }
+    .section--navy .gap-card circle { fill: #fff; }
+    .section--navy .gap-card path { stroke: #4cc3d3; }
+    .section--navy .svg-label { fill: rgba(255,255,255,.55); }
+    .section--navy .gap-question { color: #fff; }
+    .section--navy .gap-question span { color: #4cc3d3; }
+    .section--navy .paper p { color: rgba(255,255,255,.68); }
+    .section--navy .paper-meta .area, .section--navy .text-link { color: #7fd3de; }
+    .eyebrow { font-size: 12px; }
+    .findings { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 48px; padding: 30px 0; border-top: 1px solid rgba(255,255,255,.12); border-bottom: 1px solid rgba(255,255,255,.12); }
+    .finding { display: flex; gap: 18px; align-items: flex-start; }
+    .finding .n { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 52px; line-height: 1; color: #4cc3d3; letter-spacing: -.03em; min-width: 64px; flex-shrink: 0; }
+    .finding p { font-size: 14.5px; color: rgba(255,255,255,.72); }
+    .finding strong { color: #fff; font-weight: 600; }
+    .finding .ref { display: block; margin-top: 6px; font-family: var(--mono); font-size: 11px; color: rgba(255,255,255,.45); }
+    .papers { margin-top: 28px; }
+    @media (max-width: 720px) { .findings { grid-template-columns: 1fr; } }
   </style>
   <script>
     // Team photos: show initials when an image is missing (called from each img's onerror)
@@ -467,13 +516,14 @@
   <header class="site-nav">
     <div class="wrap nav-inner">
       <a href="#top" aria-label="Phenometric home"><img class="brand-logo" src="assets/logo-dark.png" alt="Phenometric" /></a>
-      <nav class="nav-links" aria-label="Primary">
+      <nav class="nav-links" id="primary-nav" aria-label="Primary">
         <a href="#research">Research</a>
         <a href="#solutions">Solutions</a>
         <a href="#science">Science</a>
         <a href="#team">Team</a>
       </nav>
       <a class="btn btn--primary btn--sm" href="mailto:gadi.mikles@phenometric.com?subject=Partnering%20with%20Phenometric">Partner with us</a>
+      <button class="nav-toggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="primary-nav"><span></span><span></span><span></span></button>
     </div>
   </header>
 
@@ -500,7 +550,7 @@
         <figure class="chart-card" id="hero-chart" aria-labelledby="hc-title hc-desc">
           <div class="chart-card-head">
             <div>
-              <div class="chart-kicker">Participant P-014, 12 weeks</div>
+              <div class="chart-kicker">Example participant, 12 weeks</div>
               <div class="chart-title" id="hc-title">Daily brain function vs. personal baseline</div>
             </div>
             <span class="badge-detect" id="hc-badge">Change detected in 3 domains</span>
@@ -514,98 +564,15 @@
           </ul>
 
           <svg class="hc-svg" viewBox="0 0 460 220" aria-hidden="true"></svg>
-          <figcaption class="chart-foot">Anonymized example from ongoing studies</figcaption>
+          <figcaption class="chart-foot">Illustrative example, not patient data</figcaption>
         </figure>
       </div>
     </section>
 
-    <!-- ============ Already moving ============ -->
-    <section class="section section--soft">
-      <div class="wrap">
-        <div class="center">
-          <div class="eyebrow">Why Phenometric</div>
-          <h2 class="h2">From functional signals to evidence<span class="dot">.</span></h2>
-        </div>
-        <p class="lead" style="margin-left:auto;margin-right:auto;text-align:center">Developed with leading hospitals to measure <strong class="ink">change within each individual</strong>, across conditions and over time.</p>
-        <div class="stats">
-          <article class="card stat">
-            <div class="stat-top"><div class="icon-badge"><svg aria-hidden="true"><use href="#i-building"/></svg></div><span class="stat-k">Clinical partnerships</span></div>
-            <h3>Built with leading hospitals</h3>
-            <p>We run research collaborations with leading academic medical centers, from protocol design to clinical validation against established measures.</p>
-          </article>
-          <article class="card stat">
-            <div class="stat-top"><div class="icon-badge"><svg aria-hidden="true"><use href="#i-flask"/></svg></div><span class="stat-k">Cross-indication</span></div>
-            <h3>One platform, many conditions</h3>
-            <p>The same passive measurement works across neurological and psychiatric conditions, and in women's health and healthy aging.</p>
-            <ul class="chips" aria-label="Conditions">
-              <li>Parkinson's disease</li><li>Multiple sclerosis</li><li>MCI</li><li>Epilepsy</li><li>Mental health</li><li>Menopause</li><li>Fatigue</li>
-            </ul>
-          </article>
-          <article class="card stat">
-            <div class="stat-top"><div class="icon-badge"><svg aria-hidden="true"><use href="#i-users"/></svg></div><span class="stat-k">Personalized modeling</span></div>
-            <h3>Every person is their own baseline</h3>
-            <p>Our patent-pending models learn what is normal for each person, including their daily rhythms and natural ups and downs. Change is then measured against that person rather than a population average.</p>
-          </article>
-          <article class="card stat">
-            <div class="stat-top"><div class="icon-badge"><svg aria-hidden="true"><use href="#i-wave"/></svg></div><span class="stat-k">Longitudinal insight</span></div>
-            <h3>Treatment response over time</h3>
-            <p>Shows when a response to treatment starts, how large it is and whether it lasts, using the weeks between clinic visits rather than a few snapshots.</p>
-          </article>
-          <article class="card stat">
-            <div class="stat-top"><div class="icon-badge"><svg aria-hidden="true"><use href="#i-filter"/></svg></div><span class="stat-k">Noise filtering</span></div>
-            <h3>Real change, not daily noise</h3>
-            <p>Our signal-processing pipelines account for context, device, time of day and mood, so a bad night or a busy day is not mistaken for a real change. The result is fewer false alerts.</p>
-          </article>
-          <article class="card stat">
-            <div class="stat-top"><div class="icon-badge"><svg aria-hidden="true"><use href="#i-phone"/></svg></div><span class="stat-k">Zero burden</span></div>
-            <h3>Fully passive on iOS &amp; Android</h3>
-            <p>Runs in the background on the phone people already use, with no tests to take and nothing to wear. Processing happens on the device, so what people type never leaves their phone.</p>
-          </article>
-        </div>
-
-        <div class="programs-head" id="research">
-          <h3>Active research programs</h3>
-          <p>Each study tests our signals against independent clinical reference measures.</p>
-        </div>
-        <div class="programs">
-          <article class="card program">
-            <div class="site">Neurology</div>
-            <h3>Multiple sclerosis</h3>
-            <div class="focus">Stable vs. meaningful change</div>
-            <p>Processing speed, fine motor dexterity and linguistic features, compared with SDMT, 9HPT and MoCA. Studying natural variability, false alerts and sensitivity to within-person change.</p>
-            <span class="tag tag--plain">Protocol and validation development</span>
-          </article>
-          <article class="card program">
-            <div class="site">Movement disorders</div>
-            <h3>Parkinson's disease</h3>
-            <div class="focus">Treatment-linked fluctuation</div>
-            <p>Typing and phone-motion patterns alongside clinical ratings, levodopa timing and ON/OFF observations (MDS-UPDRS).</p>
-            <span class="tag tag--plain">Planned clinical study</span>
-          </article>
-          <article class="card program">
-            <div class="site">Longevity</div>
-            <h3>Healthy aging</h3>
-            <div class="focus">Cognition, sleep and women's health</div>
-            <p>Cognition, fatigue, sleep and menopause-related content, with a focus on everyday function and intervention response.</p>
-            <span class="tag tag--plain">Exploratory research concept</span>
-          </article>
-        </div>
-
-        <div class="card criteria">
-          <span class="k" id="criteria-label">Validation criteria</span>
-          <ul aria-labelledby="criteria-label">
-            <li>Reliability when stable</li>
-            <li>Low false alerts</li>
-            <li>Clinically grounded responsiveness</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
     <!-- ============ Measurement gap ============ -->
-    <section class="section">
+    <section class="section section--navy" id="problem">
       <div class="wrap">
-        <div class="eyebrow">The measurement gap</div>
+        <div class="eyebrow"><span class="ix">01</span>The measurement gap</div>
         <h2 class="h2">Clinic visits are snapshots. Brain function is continuous<span class="dot">.</span></h2>
         <p class="lead">Periodic assessments miss what happens in between, such as early decline, a response to treatment, daily fluctuation, fatigue and recovery. In MS, Parkinson's, dementia, epilepsy and migraine, this is often what matters most.</p>
 
@@ -645,10 +612,96 @@
       </div>
     </section>
 
-    <!-- ============ Solutions ============ -->
-    <section class="section section--soft" id="solutions">
+    <!-- ============ Already moving ============ -->
+    <section class="section">
       <div class="wrap">
-        <div class="eyebrow">Solutions</div>
+        <div class="eyebrow"><span class="ix">02</span>Why Phenometric</div>
+        <h2 class="h2">From functional signals to evidence<span class="dot">.</span></h2>
+        <p class="lead">Developed with leading hospitals to measure <strong class="ink">change within each individual</strong>, across conditions and over time.</p>
+        <div class="stats">
+          <article class="card stat">
+            <div class="stat-top"><div class="icon-badge"><svg aria-hidden="true"><use href="#i-building"/></svg></div><span class="stat-k">Clinical partnerships</span></div>
+            <h3>Built with leading hospitals</h3>
+            <p>We run research collaborations with leading academic medical centers, from protocol design to clinical validation against established measures.</p>
+          </article>
+          <article class="card stat">
+            <div class="stat-top"><div class="icon-badge"><svg aria-hidden="true"><use href="#i-flask"/></svg></div><span class="stat-k">Cross-indication</span></div>
+            <h3>One platform, many conditions</h3>
+            <p>The same passive measurement works across neurological and psychiatric conditions, and in women's health and healthy aging.</p>
+            <ul class="chips" aria-label="Conditions">
+              <li>Parkinson's disease</li><li>Multiple sclerosis</li><li>MCI</li><li>Epilepsy</li><li>Mental health</li><li>Menopause</li><li>Fatigue</li>
+            </ul>
+          </article>
+          <article class="card stat">
+            <div class="stat-top"><div class="icon-badge"><svg aria-hidden="true"><use href="#i-users"/></svg></div><span class="stat-k">Personalized modeling</span></div>
+            <h3>Every person is their own baseline</h3>
+            <p>Our patent-pending models learn what is normal for each person, including their daily rhythms and natural ups and downs. Change is then measured against that person rather than a population average.</p>
+          </article>
+          <article class="card stat">
+            <div class="stat-top"><div class="icon-badge"><svg aria-hidden="true"><use href="#i-wave"/></svg></div><span class="stat-k">Longitudinal insight</span></div>
+            <h3>Treatment response over time</h3>
+            <p>Shows when a response to treatment starts, how large it is and whether it lasts, using the weeks between clinic visits rather than a few snapshots.</p>
+          </article>
+          <article class="card stat">
+            <div class="stat-top"><div class="icon-badge"><svg aria-hidden="true"><use href="#i-filter"/></svg></div><span class="stat-k">Noise filtering</span></div>
+            <h3>Real change, not daily noise</h3>
+            <p>Our signal-processing pipelines account for context, device, time of day and mood, so a bad night or a busy day is not mistaken for a real change. The result is fewer false alerts.</p>
+          </article>
+          <article class="card stat">
+            <div class="stat-top"><div class="icon-badge"><svg aria-hidden="true"><use href="#i-phone"/></svg></div><span class="stat-k">Zero burden</span></div>
+            <h3>Fully passive on iOS &amp; Android</h3>
+            <p>Runs in the background on the phone people already use, with no tests to take and nothing to wear. Processing happens on the device, so what people type never leaves their phone.</p>
+          </article>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ============ Research ============ -->
+    <section class="section section--soft" id="research">
+      <div class="wrap">
+        <div class="eyebrow"><span class="ix">03</span>Research</div>
+        <h2 class="h2">Active research programs<span class="dot">.</span></h2>
+        <p class="lead">Each study tests our signals against independent clinical reference measures.</p>
+        <div class="programs" style="margin-top:48px">
+          <article class="card program">
+            <div class="site">Neurology</div>
+            <h3>Multiple sclerosis</h3>
+            <div class="focus">Stable vs. meaningful change</div>
+            <p>Processing speed, fine motor dexterity and linguistic features, compared with SDMT, 9HPT and MoCA. Studying natural variability, false alerts and sensitivity to within-person change.</p>
+            <span class="tag tag--plain">Protocol and validation development</span>
+          </article>
+          <article class="card program">
+            <div class="site">Movement disorders</div>
+            <h3>Parkinson's disease</h3>
+            <div class="focus">Treatment-linked fluctuation</div>
+            <p>Typing and phone-motion patterns alongside clinical ratings, levodopa timing and ON/OFF observations (MDS-UPDRS).</p>
+            <span class="tag tag--plain">Planned clinical study</span>
+          </article>
+          <article class="card program">
+            <div class="site">Longevity</div>
+            <h3>Healthy aging</h3>
+            <div class="focus">Cognition, sleep and women's health</div>
+            <p>Cognition, fatigue, sleep and menopause-related content, with a focus on everyday function and intervention response.</p>
+            <span class="tag tag--plain">Exploratory research concept</span>
+          </article>
+        </div>
+
+        <div class="card criteria">
+          <span class="k" id="criteria-label">Validation criteria</span>
+          <ul aria-labelledby="criteria-label">
+            <li>Reliability when stable</li>
+            <li>Low false alerts</li>
+            <li>Clinically grounded responsiveness</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Solutions ============ -->
+    <section class="section" id="solutions">
+      <div class="wrap">
+        <div class="eyebrow"><span class="ix">04</span>Solutions</div>
         <h2 class="h2">One measurement platform across brain health<span class="dot">.</span></h2>
         <p class="lead">Neurology, mental health and healthy aging have a common need: to understand how everyday function changes over time, and why.</p>
 
@@ -702,12 +755,17 @@
     </section>
 
     <!-- ============ Science ============ -->
-    <section class="section" id="science">
+    <section class="section section--navy" id="science">
       <div class="wrap">
-        <div class="eyebrow">Scientific rationale</div>
+        <div class="eyebrow"><span class="ix">05</span>Scientific rationale</div>
         <h2 class="h2">Built on peer-reviewed science<span class="dot">.</span></h2>
         <p class="lead">Independent studies link everyday typing to motor, cognitive and treatment-related outcomes. We build on that work, with a focus on detecting reliable change in each individual.</p>
 
+        <div class="findings">
+          <div class="finding"><span class="n">102</span><p>people with MS followed for <strong>12 months</strong>; everyday typing tracked hand function and processing speed <span class="ref">Lam et al., 2022</span></p></div>
+          <div class="finding"><span class="n">4</span><p>peer-reviewed studies across <strong>MS, Parkinson's and cognition</strong> support typing as a functional signal</p></div>
+          <div class="finding"><span class="n">0</span><p>active tests: every signal comes from <strong>routine phone use</strong>, with nothing to wear or remember</p></div>
+        </div>
         <div class="papers">
           <article class="card paper">
             <div class="paper-meta"><span class="area">Multiple sclerosis</span><span class="src">JMIR, 2022</span></div>
@@ -742,7 +800,7 @@
     <section class="section section--soft" id="team">
       <div class="wrap">
         <div class="center">
-          <div class="eyebrow">The team</div>
+          <div class="eyebrow"><span class="ix">06</span>The team</div>
           <h2 class="h2">The people behind Phenometric<span class="dot">.</span></h2>
           <p class="lead">Product, signal engineering and AI experience, working closely with clinicians and neuroscientists.</p>
         </div>
@@ -983,6 +1041,17 @@
         links.forEach(function (a) { a.classList.toggle('is-active', a === cur); });
       }
       window.addEventListener('scroll', spy, { passive: true }); spy();
+    })();
+
+    // Mobile menu
+    (function () {
+      var btn = document.querySelector('.nav-toggle'), nav = document.getElementById('primary-nav');
+      if (!btn || !nav) return;
+      function set(open) { nav.classList.toggle('is-open', open); btn.setAttribute('aria-expanded', open); }
+      btn.addEventListener('click', function () { set(!nav.classList.contains('is-open')); });
+      nav.addEventListener('click', function (e) { if (e.target.closest('a')) set(false); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') set(false); });
+      document.addEventListener('click', function (e) { if (!e.target.closest('.site-nav')) set(false); });
     })();
 
     // Sticky nav border once the page scrolls
